@@ -1,0 +1,2686 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NEBULA QUEST — Game Reward Hub</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap');
+:root{--bg:#05050f;--panel:rgba(18,18,42,.72);--line:rgba(160,130,255,.22);--muted:#9ca3c7;--cyan:#54eaff;--pink:#ff4fd8;--violet:#a78bfa}
+*{box-sizing:border-box}body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:#f7f5ff;min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 15% 10%,rgba(116,55,210,.32),transparent 40%),radial-gradient(ellipse at 85% 20%,rgba(0,199,255,.18),transparent 38%),radial-gradient(ellipse at 55% 90%,rgba(255,55,185,.15),transparent 44%),linear-gradient(135deg,#04040c,#0a0a20 55%,#080716)}
+body:after{content:"";position:fixed;inset:0;z-index:-1;opacity:.22;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:47px 47px;mask-image:linear-gradient(to bottom,black,transparent 88%)}
+.orbit{font-family:Orbitron,sans-serif;letter-spacing:.08em}
+.glass{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(18px);box-shadow:0 18px 55px rgba(0,0,0,.32)}
+.neon-border{position:relative;isolation:isolate}
+.neon-border:before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(120deg,var(--cyan),var(--pink),#8b5cf6,var(--cyan));background-size:300% 300%;animation:rgb 7s linear infinite;z-index:-1;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+@keyframes rgb{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 rgba(84,234,255,0)}50%{box-shadow:0 0 24px rgba(84,234,255,.18)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes popCheck{0%{transform:scale(0.3);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.animate-pop{animation:popCheck .45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards}
+.animate-spin-fast{animation:spin .8s linear infinite}
+.float{animation:float 5s ease-in-out infinite}.pulse{animation:pulse 3s infinite}
+.btn{border:1px solid rgba(255,255,255,.14);background:linear-gradient(110deg,rgba(124,58,237,.95),rgba(219,39,119,.9));transition:.2s;box-shadow:0 8px 25px rgba(124,58,237,.25);position:relative;overflow:hidden}
+.btn:before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transition:.6s}
+.btn:hover:before{left:100%}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.12);box-shadow:0 12px 32px rgba(219,39,119,.3)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-ghost{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);transition:.2s}
+.btn-ghost:hover{background:rgba(255,255,255,.11);border-color:rgba(84,234,255,.4)}
+.field{width:100%;background:rgba(4,6,22,.7);border:1px solid rgba(167,139,250,.25);border-radius:12px;padding:12px 14px;color:#fff;outline:none;transition:.2s}
+.field:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(84,234,255,.1)}
+.field option{background:#12122a}
+.tab{padding:10px 14px;border-radius:12px;color:#aaa9c8;white-space:nowrap;transition:.25s;font-weight:600;position:relative}
+.tab:hover{color:#fff;background:rgba(255,255,255,.04)}
+.tab.active{color:white;background:linear-gradient(100deg,rgba(124,58,237,.4),rgba(219,39,119,.28));border:1px solid rgba(167,139,250,.35);box-shadow:0 4px 18px rgba(124,58,237,.3)}
+.wallet{background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.09);transition:.2s}
+.wallet:hover{transform:translateY(-2px);border-color:rgba(84,234,255,.3);box-shadow:0 6px 20px rgba(84,234,255,.12)}
+.muted{color:var(--muted)}.hidden{display:none!important}
+.progress{height:9px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.progress>div{height:100%;background:linear-gradient(90deg,var(--cyan),#9b7bff,var(--pink));border-radius:99px;transition:width .25s}
+.badge{font-size:11px;padding:4px 9px;border-radius:99px;border:1px solid rgba(84,234,255,.25);background:rgba(84,234,255,.08);color:#8df1ff;font-weight:600;letter-spacing:.3px}
+.toast{animation:toastIn .25s ease-out}@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.modal-back{background:rgba(2,3,15,.78);backdrop-filter:blur(8px)}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:rgba(167,139,250,.35);border-radius:10px}
+
+/* Hero section */
+.hero-glow{position:absolute;border-radius:50%;filter:blur(80px);opacity:.4;pointer-events:none}
+.hero-glow.g1{width:300px;height:300px;background:#7c3aed;top:-100px;right:-50px}
+.hero-glow.g2{width:200px;height:200px;background:#db2777;bottom:-80px;left:-40px}
+
+/* Mission step cards */
+.step-card{position:relative;border-radius:20px;overflow:hidden}
+.step-num{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:14px;background:linear-gradient(135deg,rgba(124,58,237,.5),rgba(219,39,119,.4));border:1px solid rgba(167,139,250,.4);box-shadow:0 4px 14px rgba(124,58,237,.3)}
+
+/* Link box glow */
+.link-box{background:rgba(0,0,0,.4);border:1px solid rgba(84,234,255,.3);border-radius:14px;transition:.2s;position:relative;overflow:hidden}
+.link-box:before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--pink),transparent);animation:shimmer 3s infinite}
+
+/* Provider select styling */
+.provider-chip{padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+
+/* Gateway indicator animation */
+@keyframes arrowPulse{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+.pulse-arrow{animation:arrowPulse 1.5s ease-in-out infinite;display:inline-block}
+
+/* Marquee */
+.marquee-container {
+    width: 100%;
+    overflow: hidden;
+    background: rgba(124, 58, 237, 0.15);
+    border-bottom: 1px solid rgba(167, 139, 250, 0.2);
+    padding: 6px 0;
+    position: relative;
+    z-index: 50;
+}
+.marquee-content {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 25s linear infinite;
+    font-size: 12px;
+    font-weight: 600;
+    color: #f7f5ff;
+}
+.marquee-content span {
+    margin-right: 50px;
+}
+@keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* Admin Tabs */
+.admin-tab { padding: 10px 16px; border-radius: 10px; font-size: 12px; font-weight: 700; color: var(--muted); background: rgba(255,255,255,0.03); border: 1px solid transparent; cursor: pointer; transition: 0.2s; white-space: nowrap; }
+.admin-tab:hover { color: #fff; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1); }
+.admin-tab.active { color: #fff; background: linear-gradient(110deg, rgba(84,234,255,0.15), rgba(167,139,250,0.15)); border-color: rgba(84,234,255,0.3); box-shadow: 0 4px 15px rgba(84,234,255,0.1); }
+.admin-view { display: none; animation: toastIn 0.25s ease-out forwards; }
+.admin-view.active { display: block; }
+</style>
+</head>
+<body>
+<!-- Marquee -->
+<div class="marquee-container hidden" id="marqueeWrap">
+    <div class="marquee-content" id="marqueeText">
+        <span>Chào mừng bạn đến với hệ thống!</span>
+    </div>
+</div>
+
+<header class="sticky top-0 z-40 border-b border-white/10 bg-[#05050f]/85 backdrop-blur-xl">
+ <div class="max-w-7xl mx-auto px-4 py-3">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+   <div class="flex items-center gap-3">
+    <div class="w-11 h-11 rounded-2xl neon-border glass grid place-items-center text-xl">✦</div>
+    <div>
+      <div class="orbit text-sm sm:text-base font-bold tracking-widest"><span id="siteTitleMain">NEBULA</span> <span class="text-cyan-300" id="siteTitleSub">QUEST</span></div>
+      <div class="text-[10px] muted tracking-[.2em]" id="siteSlogan">GAME REWARD HUB</div>
+    </div>
+   </div>
+   <div class="flex items-center gap-2">
+    <button id="openGiftcodeBtn" class="btn-ghost rounded-xl px-3 py-2 text-xs bg-pink-500/10 border border-pink-500/30 text-pink-200 font-bold animate-pulse">🎁 Nhập Code</button>
+    <span class="hidden sm:inline text-xs muted ml-2">Tài khoản</span>
+    <button id="accountBtn" class="btn-ghost rounded-xl px-3 py-2 text-xs">👤 <span id="accountName">Khách</span></button>
+    <button id="soundBtn" class="btn-ghost rounded-xl px-3 py-2 text-xs" title="Bật/tắt âm thanh">🔊</button>
+   </div>
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mt-3" id="walletHeader"></div>
+ </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-7">
+ <section class="relative overflow-hidden rounded-3xl glass neon-border p-6 md:p-9 mb-6">
+  <div class="hero-glow g1"></div>
+  <div class="hero-glow g2"></div>
+  <div class="relative grid md:grid-cols-[1.4fr_.6fr] gap-6 items-center">
+   <div>
+    <div class="badge mb-4">✦ HỆ THỐNG NHIỆM VỤ & ĐỔI QUÀ</div>
+    <h1 class="orbit text-2xl md:text-4xl font-extrabold leading-tight">MỞ KHÓA <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-violet-300 to-pink-400">PHẦN THƯỞNG</span><br/>THEO CÁCH CỦA BẠN</h1>
+    <p class="muted text-sm mt-4 max-w-2xl leading-6">Hoàn thành nhiệm vụ mô phỏng, tích lũy điểm thưởng từng game và đổi quà trong trung tâm Nebula.</p>
+    <div class="flex flex-wrap gap-2 mt-5">
+      <button class="btn rounded-xl px-5 py-3 text-sm font-bold" data-goto="mission">Bắt đầu nhiệm vụ ↗</button>
+      <button class="btn-ghost rounded-xl px-5 py-3 text-sm" data-goto="shop">Khám phá cửa hàng</button>
+    </div>
+   </div>
+   <div class="float hidden md:flex justify-center">
+    <div class="w-48 h-48 rounded-full border border-cyan-300/30 grid place-items-center relative" style="box-shadow:0 0 65px rgba(84,234,255,.15),inset 0 0 50px rgba(167,139,250,.15)">
+      <div class="absolute inset-3 rounded-full border border-dashed border-pink-400/40" style="animation:spin 35s linear infinite"></div>
+      <div class="absolute inset-7 rounded-full border border-dashed border-cyan-400/30" style="animation:spin 22s linear infinite reverse"></div>
+      <div class="text-center"><div class="text-5xl">🌌</div><div class="orbit text-xs mt-3 text-cyan-200">NEBULA CORE</div></div>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <nav class="glass rounded-2xl p-2 flex gap-1 overflow-x-auto mb-6">
+  <button class="tab active" data-tab="mission" id="navTab-mission">⚡ Vượt nhiệm vụ</button>
+  <button class="tab" data-tab="withdraw" id="navTab-withdraw">🎁 Rút vật phẩm</button>
+  <button class="tab" data-tab="shop" id="navTab-shop">🛍️ Shop quà tặng</button>
+  <button class="tab" data-tab="history" id="navTab-history">📜 Lịch sử</button>
+  <button class="tab" data-tab="leaderboard" id="navTab-leaderboard">🏆 BXH</button>
+  <button class="tab" data-tab="admin" title="Khu vực quản trị hệ thống" id="navTab-admin">⚙️ Quản trị</button>
+ </nav>
+
+ <section id="page-mission" class="page">
+  <div class="flex items-end justify-between gap-3 mb-4 flex-wrap">
+   <div>
+    <div class="badge">MISSION GATE</div>
+    <h2 class="orbit text-xl font-bold mt-2">Vượt nhiệm vụ 3 bước</h2>
+    <p class="muted text-xs mt-1">Chọn quà → mở link → chờ 60s → dán mã nhận thưởng.</p>
+    <div class="flex flex-wrap gap-2 mt-2">
+      <span id="levelBadge" class="badge">Lv.1</span>
+      <span id="streakBadge" class="badge">🔥 Chuỗi 0 ngày</span>
+      <span id="missionCountBadge" class="badge">0 link</span>
+    </div>
+   </div>
+   <div class="text-right">
+    <div class="text-xs muted">Lượt link còn lại hôm nay</div>
+    <div id="slotOverview" class="flex flex-wrap justify-end gap-1.5 mt-1"></div>
+   </div>
+  </div>
+
+  <div class="grid lg:grid-cols-[1.1fr_.9fr] gap-4">
+   <!-- STEP 1 -->
+   <div class="glass neon-border rounded-2xl p-5 step-card">
+    <div class="flex items-center gap-2 mb-5">
+      <div class="step-num">01</div>
+      <h3 class="font-bold">Cấu hình & tạo link nhiệm vụ</h3>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-3">
+     <label class="text-xs muted">Cổng rút gọn
+      <select id="missionProvider" class="field mt-2">
+       <option value="random">🎲 Ngẫu nhiên</option>
+       <option value="link4m">🔗 Link4M</option>
+       <option value="traffic_ontop">🚀 Traffic OnTop</option>
+       <option value="layma">⚡ Lấy Mã VIP</option>
+       <option value="yeulink">💎 Yêu Link</option>
+       <option value="megaurl">🔥 MegaURL</option>
+      </select>
+     </label>
+     <label class="text-xs muted">Loại phần thưởng
+      <select id="missionCurrency" class="field mt-2"></select>
+     </label>
+     <label id="missionTextRewardWrap" class="hidden text-xs muted sm:col-span-2">Chọn quà tặng
+      <select id="missionTextReward" class="field mt-2"></select>
+     </label>
+     <div class="text-xs muted sm:col-span-2 flex items-center justify-between p-3 rounded-xl bg-white/[.03] border border-white/10">
+      <span id="missionRewardLabel">Mức thưởng:</span>
+      <span id="missionRewardView" class="font-bold text-cyan-200 orbit text-base">50 KC</span>
+     </div>
+     <label class="text-xs muted sm:col-span-2">Tiêu đề nhiệm vụ
+      <input id="missionTitle" class="field mt-2" maxlength="70" value="Nhiệm vụ vượt link kiếm thưởng"/>
+     </label>
+     <div class="text-xs muted sm:col-span-2">
+      <div id="providerGuide" class="p-3 rounded-xl bg-cyan-300/5 border border-cyan-200/10 w-full text-[12px] leading-5">💡 Chọn cổng → mở trang xác thực → chờ 60s → copy mã → dán vào Bước 3.</div>
+     </div>
+    </div>
+    <button id="createMission" class="btn rounded-xl w-full py-3 mt-4 font-bold text-sm">TẠO LINK NHIỆM VỤ NGAY</button>
+    <div id="createdLink" class="hidden link-box mt-4 p-4">
+     <div class="flex items-center justify-between">
+      <div class="text-[10px] muted uppercase tracking-widest flex items-center gap-1.5 font-bold">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="linkGateBadge" class="text-cyan-300">GATEWAY</span>
+      </div>
+      <span class="text-[10px] text-amber-200 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-300/20">Tab mới</span>
+     </div>
+     <div class="flex gap-2 mt-2.5">
+      <input id="fakeUrl" class="field text-xs font-mono text-cyan-200" readonly/>
+      <button id="copyUrl" class="btn-ghost rounded-xl px-3 text-xs shrink-0">Copy</button>
+     </div>
+     <div class="text-xs muted mt-2 flex flex-wrap items-center justify-between gap-2" id="linkMeta"></div>
+    </div>
+   </div>
+
+   <!-- STEP 2 -->
+   <div class="glass rounded-2xl p-5 step-card">
+    <div class="flex items-center gap-2 mb-5">
+      <div class="step-num">02</div>
+      <h3 class="font-bold">Vượt link lấy mã</h3>
+    </div>
+    <div id="step2Locked" class="rounded-xl border border-dashed border-white/15 p-8 text-center">
+      <div class="text-4xl mb-3">🔒</div>
+      <div class="font-semibold text-sm">Bước 2 đang khóa</div>
+      <p class="muted text-xs mt-2">Tạo nhiệm vụ ở Bước 1 để mở khóa.</p>
+    </div>
+    <div id="step2Ready" class="hidden">
+     <div class="text-center py-4">
+      <div class="text-4xl mb-3">🔗</div>
+      <div class="font-semibold text-sm">Mở link lấy mã</div>
+      <p class="muted text-xs mt-2 leading-5">Nhấn <b class="text-cyan-200">"MỞ LINK LẤY MÃ"</b> bên dưới để sang trang xác thực. Chờ <b class="text-cyan-200">60 giây</b> rồi copy mã quay lại đây dán vào Bước 3.</p>
+     </div>
+     <div id="gatewayInfo" class="rounded-xl bg-black/30 border border-cyan-300/20 p-3 text-xs space-y-1.5 mt-3">
+      <div class="flex justify-between"><span class="muted">Cổng:</span><b id="gatewayProvider" class="text-cyan-200">Link4M</b></div>
+      <div class="flex justify-between"><span class="muted">Chờ lấy mã:</span><b class="text-cyan-200">60 giây</b></div>
+      <div class="flex justify-between"><span class="muted">Phần thưởng:</span><b id="gatewayReward" class="text-emerald-300">50 KC</b></div>
+      <div class="flex justify-between"><span class="muted">Mã hết hạn sau:</span><b id="missionExpiryCountdown" class="text-amber-200">15:00</b></div>
+     </div>
+     <button id="openGatewayBtn" class="btn rounded-xl w-full py-3 mt-4 text-sm font-bold">MỞ LINK LẤY MÃ <span class="pulse-arrow">↗</span></button>
+     <button id="devFast" class="hidden btn-ghost rounded-xl w-full py-2 mt-2 text-xs">⚙ Hiện mã cho Admin Test</button>
+     <div id="secretWrap" class="hidden mt-4 p-3 rounded-xl border border-emerald-300/25 bg-emerald-400/5">
+      <div class="text-xs text-emerald-200">✓ Mã nhiệm vụ (Admin test)</div>
+      <div class="flex gap-2 mt-2">
+        <code id="secretCode" class="flex-1 text-sm font-bold tracking-wider text-white break-all"></code>
+        <button id="copyCode" class="btn-ghost rounded-lg px-3 text-xs">Copy</button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="glass rounded-2xl p-5 mt-4 step-card">
+   <div class="flex items-center gap-2 mb-4">
+     <div class="step-num">03</div>
+     <h3 class="font-bold">Nhập mã xác thực & nhận thưởng</h3>
+   </div>
+   <div id="step3Locked" class="text-xs muted p-4 rounded-xl bg-white/[.03]">🔒 Bước 3 sẽ mở sau khi tạo nhiệm vụ ở Bước 1.</div>
+   <div id="step3Ready" class="hidden grid md:grid-cols-[1fr_auto] gap-3">
+     <input id="verifyCode" class="field" placeholder="Dán mã lấy từ trang xác thực vào đây..."/>
+     <button id="verifyMission" class="btn rounded-xl px-7 py-3 font-bold text-sm">XÁC THỰC & NHẬN THƯỞNG</button>
+   </div>
+  </div>
+
+  <div class="glass rounded-2xl p-5 mt-4">
+   <div class="flex items-center justify-between gap-2 mb-3">
+     <h3 class="font-bold flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span> Hoạt động realtime</h3>
+     <span class="text-[10px] muted">Tự động cập nhật</span>
+   </div>
+   <div id="liveFeed" class="space-y-2"></div>
+  </div>
+ </section>
+
+ <section id="page-withdraw" class="page hidden">
+  <div class="mb-4">
+    <div class="badge">REDEEM CENTER</div>
+    <h2 class="orbit text-xl font-bold mt-2">Rút vật phẩm về tài khoản game</h2>
+    <p class="muted text-xs mt-1">Lệnh rút sẽ được Admin kiểm duyệt.</p>
+  </div>
+  <div class="glass neon-border rounded-2xl p-5 max-w-3xl">
+   <div class="grid sm:grid-cols-2 gap-4">
+    <label class="text-xs muted">Chọn game
+      <select id="withdrawGame" class="field mt-2">
+        <option value="ff">Free Fire</option><option value="lq">Liên Quân</option><option value="rb">Roblox</option><option value="fc">FC Online / Mobile</option>
+      </select>
+    </label>
+    <label class="text-xs muted"><span id="uidLabel">UID Free Fire</span>
+      <input id="gameUid" class="field mt-2" placeholder="Nhập UID game"/>
+    </label>
+    <label class="text-xs muted">Gói đổi thưởng<select id="withdrawPack" class="field mt-2"></select></label>
+    <div class="rounded-xl bg-white/[.035] border border-white/10 p-3 flex flex-col justify-center">
+      <div class="text-xs muted">Chi phí</div>
+      <div id="packCost" class="font-bold text-lg text-cyan-200 mt-1">100 KC</div>
+    </div>
+   </div>
+   <button id="submitWithdraw" class="btn rounded-xl w-full py-3 mt-4 font-bold text-sm">TẠO LỆNH RÚT (CHỜ DUYỆT)</button>
+  </div>
+ </section>
+
+ <section id="page-shop" class="page hidden">
+  <div class="mb-4">
+    <div class="badge">NEBULA STORE</div>
+    <h2 class="orbit text-xl font-bold mt-2">Shop quà tặng</h2>
+    <p class="muted text-xs mt-1">Đổi vật phẩm game bằng điểm tích lũy.</p>
+  </div>
+  <div class="flex flex-wrap gap-2 mb-4">
+   <input id="shopSearch" class="field max-w-xs" placeholder="🔍 Tìm vật phẩm..."/>
+   <select id="shopGameFilter" class="field max-w-[190px]">
+    <option value="all">Tất cả game</option><option value="ff">Free Fire</option><option value="lq">Liên Quân</option><option value="rb">Roblox</option><option value="fc">FC Online</option>
+   </select>
+   <div id="shopResultCount" class="text-xs muted self-center"></div>
+  </div>
+  <div class="glass neon-border rounded-2xl p-5 mb-4">
+   <div class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <div class="badge">CASH OUT</div>
+      <h3 class="orbit text-lg font-bold mt-2" id="cashoutTitleUI">💵 Đổi HH ra VNĐ</h3>
+      <p class="muted text-xs mt-1">Tỷ giá: 1 <span class="cashoutUnitUI">HH</span> = 1.000 VNĐ</p>
+    </div>
+    <div class="text-right">
+      <div class="text-xs muted">Số dư <span class="cashoutUnitUI">HH</span></div>
+      <div class="orbit text-xl font-bold text-lime-200"><span id="hhBalance">0</span> <span class="cashoutUnitUI">HH</span></div>
+    </div>
+   </div>
+   <div class="grid sm:grid-cols-[1fr_auto_auto] gap-3 items-end mt-4">
+    <label class="text-xs muted">Số <span class="cashoutUnitUI">HH</span> muốn đổi<input id="cashoutAmount" type="number" min="0" class="field mt-2" value="100"/></label>
+    <div class="rounded-xl bg-white/[.035] border border-white/10 p-3">
+      <div class="text-[10px] muted">Nhận được</div>
+      <div id="cashoutPreview" class="font-bold text-lime-200">100.000 đ</div>
+    </div>
+    <button id="openCashout" class="btn rounded-xl px-6 py-3 text-sm font-bold">TẠO LỆNH RÚT VNĐ</button>
+   </div>
+  </div>
+  <div id="shopGrid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+ </section>
+
+ <section id="page-history" class="page hidden">
+  <div class="flex flex-wrap justify-between items-end gap-3 mb-4">
+   <div><div class="badge">MY ACTIVITY</div><h2 class="orbit text-xl font-bold mt-2">Lịch sử của bạn</h2></div>
+   <div class="flex flex-wrap gap-2">
+    <input id="historySearch" class="field max-w-[220px]" placeholder="🔍 Tìm giao dịch..."/>
+    <select id="historyFilter" class="field max-w-[180px]">
+      <option value="all">Tất cả</option><option value="mission">Vượt nhiệm vụ</option><option value="withdraw">Rút</option><option value="shop">Shop</option>
+    </select>
+    <select id="historyCurrency" class="field max-w-[150px]">
+      <option value="all">Tất cả tiền</option>
+      <!-- Option rendered by JS -->
+    </select>
+    <button id="exportHistory" class="btn-ghost rounded-xl px-4 py-2 text-xs">Xuất JSON</button>
+   </div>
+  </div>
+  <div id="historyStats" class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3"></div>
+  <div class="glass rounded-2xl overflow-hidden"><div id="historyList" class="divide-y divide-white/10"></div></div>
+ </section>
+
+ <section id="page-leaderboard" class="page hidden">
+  <div class="mb-4"><div class="badge">HALL OF FAME</div><h2 class="orbit text-xl font-bold mt-2">Bảng xếp hạng</h2></div>
+  <div id="leaderboardStats" class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4"></div>
+  <div class="glass neon-border rounded-2xl p-5"><div id="leaderboardList" class="space-y-2"></div></div>
+ </section>
+
+ <section id="page-admin" class="page hidden">
+  <div class="mb-4"><div class="badge">CONTROL ROOM</div><h2 class="orbit text-xl font-bold mt-2">Bảng quản trị Admin</h2></div>
+  
+  <div id="adminLogin" class="glass neon-border rounded-2xl p-6 sm:p-8 max-w-md mx-auto">
+   <div class="flex items-center gap-3 mb-5">
+    <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-400/30 grid place-items-center text-2xl text-cyan-300">🔐</div>
+    <div><h3 class="font-bold text-base tracking-wide">CỔNG BẢO MẬT</h3><p class="muted text-xs">Xác thực quyền quản trị</p></div>
+   </div>
+   <div class="space-y-3.5">
+    <div><label class="block text-xs muted mb-1.5 font-medium">Tài khoản</label><input id="adminUser" type="text" class="field" value="admin"/></div>
+    <div>
+      <label class="block text-xs muted mb-1.5 font-medium">Mật khẩu</label>
+      <div class="relative">
+        <input id="adminPass" type="password" class="field pr-10" value="admin123"/>
+        <button type="button" id="toggleAdminPass" class="absolute right-3 top-1/2 -translate-y-1/2 text-sm muted">👁️</button>
+      </div>
+    </div>
+   </div>
+   <button id="adminLoginBtn" class="btn rounded-xl w-full py-3 mt-5 font-bold text-sm tracking-wider">XÁC NHẬN ĐĂNG NHẬP ↗</button>
+  </div>
+  
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" class="hidden">
+   <!-- Menu Sub-Tabs Admin -->
+   <div class="flex gap-2 mb-4 overflow-x-auto pb-1" id="adminMenu">
+     <button class="admin-tab active" data-aview="overview">📊 Tổng Quan</button>
+     <button class="admin-tab" data-aview="approve">📝 Lệnh Cần Duyệt</button>
+     <button class="admin-tab" data-aview="settings">⚙️ Cài Đặt Chung</button>
+     <button class="admin-tab" data-aview="mission">🔗 Nhiệm Vụ & Thưởng</button>
+     <button class="admin-tab" data-aview="shop">🛍️ Shop & Rút</button>
+   </div>
+
+   <!-- VIEW 1: TỔNG QUAN -->
+   <div class="admin-view active space-y-4" id="aview-overview">
+       <div class="glass neon-border rounded-2xl p-5 border-cyan-400/30">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+         <div><div class="badge">REVENUE</div><h3 class="orbit text-lg font-bold mt-1">💰 Doanh Thu Vượt Link</h3></div>
+         <div class="flex items-center gap-2">
+           <span class="text-xs muted">Giá/lượt:</span>
+           <input id="revRateInput" type="number" min="1000" step="1000" class="field py-1.5 px-3 w-28 text-xs font-bold" value="10000"/>
+           <button id="saveRevRate" class="btn rounded-xl px-3 py-1.5 text-xs font-bold">Lưu</button>
+         </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+         <div class="wallet rounded-xl p-3 border-amber-400/20 bg-amber-400/5">
+           <div class="text-[10px] muted">Lượt của bạn</div>
+           <div class="orbit font-bold text-lg mt-1" id="adminMyPassCount">0 link</div>
+           <div class="text-[11px] text-amber-300 font-semibold mt-1" id="adminMyRevVnd">0 đ</div>
+         </div>
+         <div class="wallet rounded-xl p-3 border-emerald-400/20 bg-emerald-400/5">
+           <div class="text-[10px] muted">Tổng thu vượt link</div>
+           <div class="orbit font-bold text-lg text-emerald-300 mt-1" id="adminTotalPassCount">0 link</div>
+           <div class="text-[11px] text-emerald-400 font-semibold mt-1" id="adminGrossRevVnd">0 đ</div>
+         </div>
+         <div class="wallet rounded-xl p-3 border-rose-400/20 bg-rose-400/5">
+           <div class="text-[10px] text-rose-300">Đã trừ duyệt rút (1k=10 game)</div>
+           <div class="orbit font-bold text-lg text-rose-300 mt-1" id="adminPayoutRevVnd">-0 đ</div>
+           <div class="text-[10px] muted mt-1" id="adminPayoutCount">0 lệnh duyệt</div>
+         </div>
+         <div class="wallet rounded-xl p-3 border-cyan-400/30 bg-cyan-400/10">
+           <div class="text-[10px] muted uppercase font-bold text-cyan-300">DOANH THU THỰC TẾ</div>
+           <div class="orbit font-extrabold text-xl sm:text-2xl text-cyan-200 mt-1" id="adminTotalRevVnd">0 đ</div>
+           <div class="text-[10px] text-cyan-300/80 mt-1">Lợi nhuận ròng sau chi trả</div>
+         </div>
+        </div>
+       </div>
+
+       <div class="glass rounded-2xl p-5 border border-white/5">
+        <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+          <h3 class="font-bold text-cyan-200">🤖 Cấu Hình Bot Ảo Vượt Link & Rút Tiền</h3>
+          <span class="badge">Tự động ngẫu nhiên</span>
+        </div>
+        <p class="muted text-xs mb-4">Cấu hình thời gian bot vượt link sau mấy giây và số link bị cày ngẫu nhiên mỗi đợt.</p>
+        <div class="grid sm:grid-cols-4 gap-3 items-end">
+          <label class="text-xs muted">Trạng thái
+            <select id="fakeEnabled" class="field mt-2">
+              <option value="1">Bật</option>
+              <option value="0">Tắt</option>
+            </select>
+          </label>
+          <label class="text-xs muted">Vượt link sau mấy giây (s)
+            <input id="fakeSpeed" type="number" min="1" max="600" class="field mt-2" placeholder="Ví dụ: 30"/>
+          </label>
+          <label class="text-xs muted">Link tối thiểu/đợt
+            <input id="fakeMinLinks" type="number" min="1" max="20" class="field mt-2" placeholder="3"/>
+          </label>
+          <label class="text-xs muted">Link tối đa/đợt
+            <input id="fakeMaxLinks" type="number" min="1" max="50" class="field mt-2" placeholder="5"/>
+          </label>
+        </div>
+        <button id="saveFake" class="btn rounded-xl px-6 py-3 mt-4 text-sm font-bold shadow-[0_0_15px_rgba(84,234,255,0.2)]">LƯU CẤU HÌNH BOT ẢO</button>
+       </div>
+   </div>
+
+   <!-- VIEW 2: LỆNH CHỜ DUYỆT -->
+   <div class="admin-view space-y-4" id="aview-approve">
+       <!-- BẢNG CẤU HÌNH BOT AUTO DUYỆT -->
+       <div class="glass rounded-2xl p-5 border border-amber-400/25 bg-amber-400/[0.02]">
+        <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+          <h3 class="font-bold text-amber-300 flex items-center gap-2">🤖 Bot Tự Động Duyệt Lệnh (Auto-Approve)</h3>
+          <span class="badge text-amber-200 border-amber-300/30">Hỗ trợ siêu tốc</span>
+        </div>
+        <p class="muted text-xs mb-4">Tự động duyệt các lệnh rút theo chu kỳ giây được cài đặt (mặc định 5s duyệt 1 lệnh), tự động trừ chi phí quy đổi (1k=10 game / 1 HH=1.000 VNĐ) vào doanh thu.</p>
+        <div class="grid sm:grid-cols-3 gap-3 items-end">
+          <label class="text-xs muted">Trạng thái Auto Duyệt
+            <select id="autoApproveEnabled" class="field mt-2">
+              <option value="1">Bật (Tự động duyệt)</option>
+              <option value="0">Tắt (Duyệt thủ công)</option>
+            </select>
+          </label>
+          <label class="text-xs muted">Tốc độ tự duyệt (giây/lệnh)
+            <input id="autoApproveSpeed" type="number" min="1" max="120" class="field mt-2" placeholder="5" value="5"/>
+          </label>
+          <button id="saveAutoApproveBtn" class="btn rounded-xl px-5 py-3 text-xs font-bold shadow-[0_0_15px_rgba(245,158,11,0.25)]">LƯU CÀI ĐẶT DUYỆT</button>
+        </div>
+       </div>
+
+       <div class="glass neon-border rounded-2xl p-5 border-amber-400/30">
+        <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+          <h3 class="font-bold text-base text-amber-300 flex items-center gap-2">
+            <span>📝 Danh sách Lệnh Yêu Cầu Rút</span>
+            <span class="badge" id="pendingCountBadge">0 / 100 lệnh</span>
+          </h3>
+          <div class="flex items-center gap-2">
+            <button id="approveAllBtn" class="btn rounded-xl px-3.5 py-1.5 text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">⚡ Duyệt Nhanh Tất Cả</button>
+            <button id="clearAllPendingBtn" class="btn-ghost rounded-xl px-3 py-1.5 text-xs text-rose-300 border-rose-400/30">✕ Xóa Hàng Chờ</button>
+          </div>
+        </div>
+        <p class="muted text-xs mb-4">Các lệnh rút tiền / đổi quà của người dùng và bot hiển thị tại đây (sức chứa tối đa 100 lệnh). Tiền sẽ tự trừ vào doanh thu khi duyệt.</p>
+        
+        <div id="adminPendingList" class="divide-y divide-white/10 space-y-2">
+            <!-- Render by JS -->
+        </div>
+       </div>
+   </div>
+
+   <!-- VIEW 3: CÀI ĐẶT CHUNG -->
+   <div class="admin-view space-y-4" id="aview-settings">
+       <div class="glass neon-border rounded-2xl p-5 border-violet-400/30">
+        <h3 class="font-bold text-base text-violet-300 mb-3">⚙️ Tên Tiền Tệ Tùy Chỉnh</h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs muted block mb-1">Tiền Chính (Mặc định: KC)</label>
+            <div class="flex gap-2">
+              <input id="curName_KC" type="text" class="field flex-1" placeholder="Vàng, Point..."/>
+              <input id="curIcon_KC" type="text" class="field w-16 text-center" placeholder="💎"/>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs muted block mb-1">Tiền Phụ (Mặc định: QH)</label>
+            <div class="flex gap-2">
+              <input id="curName_QH" type="text" class="field flex-1" placeholder="Xu, Bạc..."/>
+              <input id="curIcon_QH" type="text" class="field w-16 text-center" placeholder="🔮"/>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs muted block mb-1">Tiền Khác 1 (Mặc định: Robux)</label>
+            <div class="flex gap-2">
+              <input id="curName_Robux" type="text" class="field flex-1" placeholder="Robux..."/>
+              <input id="curIcon_Robux" type="text" class="field w-16 text-center" placeholder="🟡"/>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs muted block mb-1">Tiền Khác 2 (Mặc định: FC)</label>
+            <div class="flex gap-2">
+              <input id="curName_FC" type="text" class="field flex-1" placeholder="FC Points..."/>
+              <input id="curIcon_FC" type="text" class="field w-16 text-center" placeholder="⚽"/>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs muted block mb-1">Tiền Rút VNĐ (Mặc định: HH)</label>
+            <div class="flex gap-2">
+              <input id="curName_HH" type="text" class="field flex-1" placeholder="VNĐ, Lúa..."/>
+              <input id="curIcon_HH" type="text" class="field w-16 text-center" placeholder="💵"/>
+            </div>
+          </div>
+        </div>
+        
+        <hr class="border-white/10 my-5" />
+        
+        <h3 class="font-bold text-base text-pink-300 mb-3">🏷️ Đổi Tên Các Mục (Menu Tab)</h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class="text-xs muted block mb-1">Tab 1</label><input id="tabName_mission" type="text" class="field" placeholder="⚡ Vượt nhiệm vụ"/></div>
+            <div><label class="text-xs muted block mb-1">Tab 2</label><input id="tabName_withdraw" type="text" class="field" placeholder="🎁 Rút vật phẩm"/></div>
+            <div><label class="text-xs muted block mb-1">Tab 3</label><input id="tabName_shop" type="text" class="field" placeholder="🛍️ Shop quà tặng"/></div>
+            <div><label class="text-xs muted block mb-1">Tab 4</label><input id="tabName_history" type="text" class="field" placeholder="📜 Lịch sử"/></div>
+            <div><label class="text-xs muted block mb-1">Tab 5</label><input id="tabName_leaderboard" type="text" class="field" placeholder="🏆 BXH"/></div>
+            <div><label class="text-xs muted block mb-1">Tab 6</label><input id="tabName_admin" type="text" class="field" placeholder="⚙️ Quản trị"/></div>
+        </div>
+
+        <hr class="border-white/10 my-5" />
+
+        <h3 class="font-bold text-base text-cyan-300 mb-3">🖥️ Cài Đặt Giao Diện Web</h3>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div><label class="text-xs muted block mb-1">Tên Site Chính</label><input id="siteTitleMainInput" type="text" class="field" placeholder="NEBULA"/></div>
+          <div><label class="text-xs muted block mb-1">Tên Site Phụ</label><input id="siteTitleSubInput" type="text" class="field" placeholder="QUEST"/></div>
+          <div><label class="text-xs muted block mb-1">Câu Slogan Nhỏ</label><input id="siteSloganInput" type="text" class="field" placeholder="GAME REWARD HUB"/></div>
+        </div>
+
+        <label class="text-xs muted block mt-4 mb-1">Thông Báo Chạy (Marquee)</label>
+        <div class="flex gap-2 items-start">
+            <label class="flex items-center gap-2 mt-3 cursor-pointer">
+                <input type="checkbox" id="marqueeEnable" class="w-4 h-4 accent-cyan-400" />
+                <span class="text-xs text-white">Bật</span>
+            </label>
+            <input id="marqueeTextInput" type="text" class="field flex-1" placeholder="Chào mừng bạn đến với NEBULA QUEST..."/>
+        </div>
+
+        <button id="saveSystemConfigBtn" class="btn rounded-xl px-6 py-3 mt-6 text-sm w-full font-bold shadow-[0_0_20px_rgba(167,139,250,0.3)]">LƯU TẤT CẢ CÀI ĐẶT HỆ THỐNG</button>
+       </div>
+   </div>
+
+   <!-- VIEW 4: NHIỆM VỤ & THƯỞNG -->
+   <div class="admin-view space-y-4" id="aview-mission">
+       <div class="glass rounded-2xl p-5 border border-white/5">
+        <h3 class="font-bold mb-3 text-cyan-200">🎯 Mức Thưởng Vượt Link (Mặc định)</h3>
+        <p class="muted text-xs mb-3">Tiền tự cộng khi user vượt link.</p>
+        <div id="defaultRewardsGrid" class="grid grid-cols-2 md:grid-cols-5 gap-3"></div>
+        <button id="saveRewards" class="btn rounded-xl px-6 py-3 mt-4 text-sm font-bold">Lưu Mức Thưởng</button>
+       </div>
+       
+       <div class="glass rounded-2xl p-5 border border-white/5">
+        <h3 class="font-bold mb-3 text-pink-200">⚙️ Giới Hạn Lượt Làm Mỗi Ngày</h3>
+        <p class="muted text-xs mb-3">Số link tối đa 1 user được làm.</p>
+        <div id="limitGrid" class="grid grid-cols-2 md:grid-cols-5 gap-3"></div>
+        <button id="saveLimit" class="btn rounded-xl px-6 py-3 mt-4 text-sm font-bold">Lưu Giới Hạn</button>
+       </div>
+
+       <div class="glass neon-border rounded-2xl p-5 border-amber-400/35">
+        <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+         <div><h3 class="font-bold text-base text-white">🎁 Quà Nhận Trực Tiếp Qua Link 60s</h3><p class="muted text-xs mt-1">Thay vì nhận tiền, nhận luôn nội dung quà.</p></div>
+         <button id="addTextRewardBtn" class="btn rounded-xl px-4 py-2 text-xs font-bold">+ Thêm quà</button>
+        </div>
+        <div id="adminTextRewardList" class="space-y-2.5 mt-4"></div>
+       </div>
+
+       <div class="glass rounded-2xl p-5 border border-white/5">
+        <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+         <div><h3 class="font-bold text-base">🎁 Tạo Loại Tiền/Mục Thưởng Mới</h3></div>
+         <button id="addCustomRewardBtn" class="btn rounded-xl px-4 py-2 text-xs font-bold">+ Thêm</button>
+        </div>
+        <div id="customRewardList" class="space-y-2 mt-3"></div>
+       </div>
+   </div>
+
+   <!-- VIEW 5: SHOP & RÚT -->
+   <div class="admin-view space-y-4" id="aview-shop">
+       <div class="glass rounded-2xl p-5 border border-pink-400/30">
+        <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+         <div><h3 class="font-bold text-base text-pink-200">🎟️ Quản lý Mã Quà Tặng (Giftcode)</h3></div>
+         <button id="addGiftcodeBtn" class="btn rounded-xl px-4 py-2 text-xs font-bold">+ Tạo mã</button>
+        </div>
+        <div id="adminGiftcodeList" class="space-y-2.5 mt-4"></div>
+       </div>
+
+       <div class="glass neon-border rounded-2xl p-5">
+         <div class="flex flex-wrap items-center justify-between gap-3">
+           <div><h3 class="orbit text-lg font-bold text-lime-200">💸 Hạn Mức Tối Thiểu Khi Rút</h3><p class="muted text-xs mt-1">Số dư tối thiểu user phải có mới được đổi gói/rút.</p></div>
+         </div>
+         <div id="minCashoutGrid" class="grid grid-cols-2 md:grid-cols-5 gap-3 mt-4"></div>
+         <button id="saveMinCashout" class="btn rounded-xl px-6 py-3 mt-4 text-sm font-bold">Lưu Hạn Mức</button>
+       </div>
+
+       <div class="glass rounded-2xl p-5 border border-white/5">
+        <div class="flex justify-between gap-2 items-center mb-3">
+            <div><h3 class="font-bold">🛍️ Shop Đổi Quà</h3></div>
+            <button id="addShop" class="btn rounded-lg px-3 py-2 text-xs">+ Thêm</button>
+        </div>
+        <div id="adminShopList" class="space-y-2"></div>
+       </div>
+
+       <div class="glass rounded-2xl p-5 border border-white/5">
+        <div class="flex justify-between gap-2 items-center mb-3">
+            <div><h3 class="font-bold">🎁 Các Gói Đổi Thưởng Về Game</h3></div>
+            <button id="addPack" class="btn rounded-lg px-3 py-2 text-xs">+ Thêm</button>
+        </div>
+        <div id="adminPackList" class="space-y-2"></div>
+       </div>
+   </div>
+
+   <div class="mt-6 text-center">
+    <button id="adminLogout" class="btn-ghost rounded-xl px-6 py-3 text-xs font-bold text-rose-300 border-rose-500/30 hover:bg-rose-500/10">ĐĂNG XUẤT QUẢN TRỊ</button>
+   </div>
+  </div>
+ </section>
+
+ <footer class="text-center py-8 text-[10px] muted">NEBULA QUEST © 2026 · DEMO REWARD SIMULATOR.</footer>
+</main>
+
+<!-- MODAL NHẬP GIFTCODE -->
+<div id="giftcodeModal" class="hidden fixed inset-0 z-50 modal-back grid place-items-center p-4">
+  <div class="glass neon-border rounded-2xl p-6 w-full max-w-sm">
+    <div class="flex justify-between items-center"><h3 class="font-bold text-pink-300">🎁 Nhập Mã Quà Tặng</h3><button class="muted closeGiftcode">✕</button></div>
+    <input id="giftcodeInput" class="field mt-4 uppercase font-bold text-center tracking-widest text-lg text-white" placeholder="NHẬP MÃ TẠI ĐÂY"/>
+    <button id="submitGiftcode" class="btn rounded-xl w-full py-3 mt-4 text-sm font-bold shadow-[0_0_15px_rgba(255,79,216,0.3)]">XÁC NHẬN NHẬN QUÀ</button>
+  </div>
+</div>
+
+<div id="withdrawSuccessModal" class="hidden fixed inset-0 z-50 modal-back grid place-items-center p-4">
+ <div class="glass neon-border rounded-3xl p-6 sm:p-8 w-full max-w-md relative overflow-hidden text-center shadow-2xl">
+  <div id="withdrawPendingState" class="py-6">
+   <div class="w-16 h-16 mx-auto rounded-full border-4 border-cyan-400/20 border-t-cyan-400 animate-spin-fast"></div>
+   <div class="orbit font-bold text-lg mt-5 text-cyan-200">ĐANG ĐỒNG BỘ...</div>
+   <div class="progress max-w-xs mx-auto mt-5"><div id="withdrawLoadingBar" style="width:30%"></div></div>
+  </div>
+  <div id="withdrawDoneState" class="hidden py-2">
+   <div class="w-16 h-16 mx-auto rounded-full bg-emerald-500/20 border-2 border-emerald-400/80 grid place-items-center animate-pop">
+    <svg class="w-9 h-9 text-emerald-300" fill="none" stroke="currentColor" stroke-width="3.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+   </div>
+   <h3 class="orbit text-lg sm:text-xl font-bold mt-3 text-emerald-300">LỆNH RÚT ĐÃ ĐƯỢC GỬI!</h3>
+   <p class="text-xs text-center muted mt-1">Lệnh đã được chuyển tới Admin phê duyệt.</p>
+   <div class="rounded-xl bg-black/40 border border-white/10 p-3.5 mt-3 text-left space-y-2 text-xs font-medium">
+     <div class="flex justify-between"><span class="muted">Mã đơn:</span><b id="popId" class="text-cyan-200 font-mono"></b></div>
+     <div class="flex justify-between"><span class="muted">Tựa game:</span><b id="popGame" class="text-white"></b></div>
+     <div class="flex justify-between"><span class="muted">Gói quà:</span><b id="popPack" class="text-emerald-300"></b></div>
+     <div class="flex justify-between"><span class="muted">Tài khoản/UID:</span><b id="popUid" class="text-pink-300 font-mono"></b></div>
+   </div>
+   <button id="closeWithdrawSuccess" class="btn rounded-xl w-full py-3 mt-4 font-bold text-sm">HOÀN TẤT</button>
+  </div>
+ </div>
+</div>
+
+<div id="rewardTextModal" class="hidden fixed inset-0 z-50 modal-back grid place-items-center p-4">
+ <div class="glass neon-border rounded-3xl p-6 sm:p-7 w-full max-w-md relative overflow-hidden text-center shadow-2xl">
+  <div class="w-16 h-16 mx-auto rounded-full bg-emerald-500/20 border-2 border-emerald-400/80 grid place-items-center"><span class="text-2xl">🔑</span></div>
+  <h3 class="orbit text-xl font-bold mt-3" id="textRewardTitle">PHẦN THƯỞNG</h3>
+  <p class="text-xs muted mt-1">Nội dung quà tặng:</p>
+  <textarea id="textRewardContent" class="field h-24 text-xs font-mono text-cyan-200 select-all mt-4" readonly></textarea>
+  <div class="flex gap-2 mt-5">
+    <button id="copyRewardTextBtn" class="btn rounded-xl flex-1 py-3 text-xs font-bold">SAO CHÉP</button>
+    <button id="closeRewardTextBtn" class="btn-ghost rounded-xl px-5 text-xs font-semibold">Đóng</button>
+  </div>
+ </div>
+</div>
+
+<div id="accountModal" class="hidden fixed inset-0 z-50 modal-back grid place-items-center p-4">
+  <div class="glass neon-border rounded-2xl p-6 w-full max-w-sm">
+    <div class="flex justify-between items-center"><h3 class="font-bold">Tài khoản</h3><button class="muted" id="closeAccount">✕</button></div>
+    <p class="muted text-xs mt-2 mb-4">Dữ liệu lưu riêng theo tên.</p>
+    <input id="accountInput" class="field" maxlength="24" placeholder="Tên tài khoản"/>
+    <div class="flex gap-2 mt-3">
+      <button id="saveAccount" class="btn rounded-xl flex-1 py-3 text-sm">Lưu</button>
+      <button id="guestAccount" class="btn-ghost rounded-xl px-3 text-xs">Khách</button>
+    </div>
+  </div>
+</div>
+
+<div id="editModal" class="hidden fixed inset-0 z-50 modal-back grid place-items-center p-4">
+  <div class="glass neon-border rounded-2xl p-6 w-full max-w-md">
+    <div class="flex justify-between"><h3 id="editTitle" class="font-bold">Chỉnh sửa</h3><button id="closeEdit" class="muted">✕</button></div>
+    <div id="editFields" class="space-y-3 mt-4"></div>
+    <div class="flex gap-2 mt-5">
+      <button id="saveEdit" class="btn rounded-xl flex-1 py-3 text-sm">Lưu</button>
+      <button id="cancelEdit" class="btn-ghost rounded-xl px-4 text-sm">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<div id="cashoutModal" class="hidden fixed inset-0 z-50 modal-back grid place-items-center p-4">
+  <div class="glass neon-border rounded-2xl p-6 w-full max-w-md">
+    <div class="flex justify-between items-center"><h3 class="font-bold">Đổi <span class="cashoutUnitUI">HH</span> ra VNĐ</h3><button id="closeCashout" class="muted">✕</button></div>
+    <div class="space-y-3 mt-4">
+      <label class="block text-xs muted">STK<input id="cashoutStk" class="field mt-2"/></label>
+      <label class="block text-xs muted">Ngân hàng<input id="cashoutBank" class="field mt-2"/></label>
+      <label class="block text-xs muted">Tên chủ TK<input id="cashoutName" class="field mt-2"/></label>
+    </div>
+    <div class="flex gap-2 mt-5">
+      <button id="confirmCashout" class="btn rounded-xl flex-1 py-3 text-sm">RÚT TIỀN (CHỜ DUYỆT)</button>
+      <button id="cancelCashout" class="btn-ghost rounded-xl px-4 text-sm">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<div id="toastArea" class="fixed bottom-4 right-4 z-[70] space-y-2 w-[min(360px,calc(100vw-2rem))]"></div>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+
+const DEFAULT_CURRENCIES = {
+ KC:{name:'Kim Cương',short:'KC',icon:'💎',color:'text-cyan-200'},
+ QH:{name:'Quân Huy',short:'QH',icon:'🔮',color:'text-violet-200'},
+ Robux:{name:'Robux',short:'Robux',icon:'🟡',color:'text-yellow-200'},
+ FC:{name:'FC Points',short:'FC',icon:'⚽',color:'text-emerald-200'},
+ HH:{name:'Hoa Hồng',short:'HH',icon:'💵',color:'text-lime-200'},
+};
+const CASHOUT_RATE = 1000;
+const CODE_REGEX = /^TUNA-[A-Z0-9]{2,16}-[A-Z0-9]{4}-\d{4}$/;
+
+const DEFAULT_SETTINGS = {
+ defaultRewards:{KC:50,QH:50,Robux:50,FC:50,HH:50},
+ dailyLimits:{KC:100,QH:100,Robux:100,FC:100,HH:100},
+ fake:{enabled:true,speed:30,count:3,minLinks:3,maxLinks:5},
+ adminAuth:{user:'admin',pass:'admin123'},
+ revenuePerLink:10000,
+ totalPayoutVnd:0,
+ autoApprove:{enabled:true,speed:5},
+ customRewards:[],
+ giftcodes:[],
+ minCashoutRates: { KC: 100, QH: 100, Robux: 100, FC: 100, HH: 100 },
+ sysConfig: {
+     currencyNames: {}, 
+     marquee: { enabled: false, text: 'Chào mừng bạn đến với hệ thống!' },
+     siteName: { main: 'NEBULA', sub: 'QUEST', slogan: 'GAME REWARD HUB' },
+     tabNames: {
+         mission: '⚡ Vượt nhiệm vụ',
+         withdraw: '🎁 Rút vật phẩm',
+         shop: '🛍️ Shop quà tặng',
+         history: '📜 Lịch sử',
+         leaderboard: '🏆 BXH',
+         admin: '⚙️ Quản trị'
+     }
+ }
+};
+
+const defaultShop = [
+ {id:'s1',name:'Vé Thẻ Vô Cực',game:'ff',currency:'KC',price:250,desc:'Vật phẩm FF',icon:'🎟️',stock:20,dailyLimit:3},
+ {id:'s2',name:'Gói Sổ Sứ Mệnh',game:'lq',currency:'QH',price:180,desc:'Quà LQ',icon:'📘',stock:20,dailyLimit:3},
+ {id:'s3',name:'Gamepass cơ bản',game:'rb',currency:'Robux',price:120,desc:'Quà RBX',icon:'🕹️',stock:20,dailyLimit:3},
+ {id:'s4',name:'Gói FC Starter',game:'fc',currency:'FC',price:300,desc:'Quà FC',icon:'⚽',stock:20,dailyLimit:3}
+];
+const defaultPacks = [
+ {id:'p1',game:'ff',label:'100 Kim Cương',currency:'KC',cost:100,amount:100},
+ {id:'p2',game:'ff',label:'310 Kim Cương',currency:'KC',cost:310,amount:310},
+ {id:'p3',game:'lq',label:'100 Quân Huy',currency:'QH',cost:100,amount:100},
+ {id:'p4',game:'rb',label:'80 Robux',currency:'Robux',cost:80,amount:80},
+ {id:'p5',game:'fc',label:'100 FC Points',currency:'FC',cost:100,amount:100}
+];
+
+let currentUser = localStorage.getItem('nebula_user') || 'Khách';
+let settings = loadSettings();
+let state = null;
+let globalPendingApprovals = JSON.parse(localStorage.getItem('nebula_pending') || '[]');
+let activeMission = null;
+let expiryInterval = null;
+let soundOn = true, adminOn = false, editHandler = null;
+const keyFor = name => 'nebula_data_' + name.toLowerCase().replace(/[^a-z0-9_-]/g,'_');
+const FAKE_NAMES=['Minh Anh','Tuấn Kiệt','Bảo Ngọc','Hoàng Nam','Gia Hân','Đức Huy','Khánh Linh','Thành Đạt','Ngọc Mai','Quốc Bảo','Phương Thảo','Hữu Phước'];
+
+function seedLeaderboard(){const o={};FAKE_NAMES.forEach((n,i)=>{o[n]=4+((i*7)%13);});return o;}
+function today(){return new Date().toLocaleDateString('en-CA');}
+
+function freshState(){
+ return {
+  wallet:{KC:0,QH:0,Robux:0,FC:0,HH:0},
+  history:[], shop:structuredClone(defaultShop), textRewards:[],
+  packs:structuredClone(defaultPacks),
+  daily:{date:today(),used:{KC:0,QH:0,Robux:0,FC:0,HH:0}},
+  shopDaily:{date:today(),counts:{}},
+  leaderboard:seedLeaderboard(),
+  missions:0, streak:0, claimedCodes:[],
+  claimedGiftcodes: []
+ };
+}
+
+function loadSettings(){
+ try{
+  const raw=localStorage.getItem('nebula_admin_settings');
+  const s=raw?JSON.parse(raw):null;
+  return {
+   defaultRewards:{...DEFAULT_SETTINGS.defaultRewards,...(s?.defaultRewards||{})},
+   dailyLimits:{...DEFAULT_SETTINGS.dailyLimits,...(s?.dailyLimits||{})},
+   fake:{...DEFAULT_SETTINGS.fake,...(s?.fake||{})},
+   adminAuth:{...DEFAULT_SETTINGS.adminAuth,...(s?.adminAuth||{})},
+   revenuePerLink: Number(s?.revenuePerLink) || DEFAULT_SETTINGS.revenuePerLink,
+   totalPayoutVnd: Number(s?.totalPayoutVnd) || 0,
+   autoApprove: { enabled: s?.autoApprove?.enabled ?? true, speed: Number(s?.autoApprove?.speed) || 5 },
+   customRewards: Array.isArray(s?.customRewards) ? s.customRewards : [],
+   giftcodes: Array.isArray(s?.giftcodes) ? s.giftcodes : [],
+   minCashoutRates: {...DEFAULT_SETTINGS.minCashoutRates,...(s?.minCashoutRates||{})},
+   sysConfig: {
+       currencyNames: s?.sysConfig?.currencyNames || {},
+       marquee: s?.sysConfig?.marquee || DEFAULT_SETTINGS.sysConfig.marquee,
+       siteName: s?.sysConfig?.siteName || DEFAULT_SETTINGS.sysConfig.siteName,
+       tabNames: s?.sysConfig?.tabNames || DEFAULT_SETTINGS.sysConfig.tabNames
+   }
+  };
+ }catch(e){return structuredClone(DEFAULT_SETTINGS);}
+}
+function saveSettings(){localStorage.setItem('nebula_admin_settings',JSON.stringify(settings));}
+function savePending(){localStorage.setItem('nebula_pending', JSON.stringify(globalPendingApprovals));}
+
+function isBotRecord(x){
+ if(!x) return true;
+ if(x.isOwn === false) return true;
+ if(x.user && x.user !== currentUser) return true;
+ for(const n of FAKE_NAMES){if(x.detail && x.detail.startsWith(n)) return true;}
+ return false;
+}
+
+function loadState(){
+ try{
+  const raw=localStorage.getItem(keyFor(currentUser));
+  state=raw?JSON.parse(raw):freshState();
+  if(!state.wallet||!state.daily) state=freshState();
+  Object.keys(DEFAULT_CURRENCIES).forEach(k=>{if(!Number.isFinite(state.wallet[k])) state.wallet[k]=0;});
+  if(!state.daily.used||typeof state.daily.used!=='object') state.daily.used={KC:0,QH:0,Robux:0,FC:0,HH:0};
+  if(state.daily.date!==today()) state.daily={date:today(),used:{KC:0,QH:0,Robux:0,FC:0,HH:0}};
+  if(!state.shopDaily||typeof state.shopDaily!=='object') state.shopDaily={date:today(),counts:{}};
+  if(!state.leaderboard||typeof state.leaderboard!=='object') state.leaderboard=seedLeaderboard();
+  if(!Number.isFinite(state.missions)) state.missions=0;
+  if(!Number.isFinite(state.streak)) state.streak=0;
+  if(!Array.isArray(state.textRewards)) state.textRewards=[];
+  if(!Array.isArray(state.claimedCodes)) state.claimedCodes=[];
+  if(!Array.isArray(state.claimedGiftcodes)) state.claimedGiftcodes=[];
+  if(Array.isArray(state.history)){
+   state.history = state.history.filter(x => !isBotRecord(x));
+   state.history.forEach(x => { x.user = currentUser; x.isOwn = true; });
+  } else { state.history = []; }
+ }catch(e){state=freshState();}
+ saveState();
+}
+function saveState(){localStorage.setItem(keyFor(currentUser),JSON.stringify(state));}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function fmt(n){return Number(n||0).toLocaleString('vi-VN');}
+
+// ===== CODE / MISSION HELPERS =====
+function randPart(n){
+ let s='';
+ for(let i=0;i<n;i++) s += Math.floor(Math.random()*36).toString(36);
+ return s.toUpperCase();
+}
+function generateCode(currency){
+ return `TUNA-${String(currency).toUpperCase()}-${randPart(4)}-${1000 + Math.floor(Math.random()*9000)}`;
+}
+function activeMissionKey(){ return 'nebula_active_mission_' + keyFor(currentUser); }
+function saveActiveMission(){
+ try{
+  if(activeMission) localStorage.setItem(activeMissionKey(), JSON.stringify(activeMission));
+  else localStorage.removeItem(activeMissionKey());
+ }catch(e){}
+}
+function loadActiveMission(){
+ try{
+  const raw = localStorage.getItem(activeMissionKey());
+  if(!raw) return null;
+  const m = JSON.parse(raw);
+  if(!m || !m.code || Date.now() > (Number(m.expiresAt) || 0)){
+   localStorage.removeItem(activeMissionKey());
+   return null;
+  }
+  return m;
+ }catch(e){ return null; }
+}
+
+// ===== GATEWAY HTML GENERATOR =====
+const PROVIDER_THEME = {
+  link4m:        {name:'Link4M',         icon:'🔗', color:'#ef4444', color2:'#f97316', glow:'rgba(239,68,68,.45)',  tag:'LINK SHORTENER'},
+  traffic_ontop: {name:'Traffic OnTop',  icon:'🚀', color:'#f97316', color2:'#facc15', glow:'rgba(249,115,22,.45)', tag:'TRAFFIC EXCHANGE'},
+  layma:         {name:'Lấy Mã VIP',     icon:'⚡', color:'#22d3ee', color2:'#3b82f6', glow:'rgba(34,211,238,.45)', tag:'VIP CODE GATE'},
+  yeulink:       {name:'Yêu Link',       icon:'💎', color:'#a855f7', color2:'#ec4899', glow:'rgba(168,85,247,.45)', tag:'PREMIUM GATEWAY'},
+  megaurl:       {name:'MegaURL',        icon:'🔥', color:'#ec4899', color2:'#f43f5e', glow:'rgba(236,72,153,.45)', tag:'SECURE REDIRECT'}
+};
+
+function buildGatewayUrl(m){
+  const code = m.code || 'TUNA-XX-0000-0000';
+  const claimUrl = m.claimUrl || '';
+  const theme = PROVIDER_THEME[m.providerKey] || PROVIDER_THEME.link4m;
+  const rewardName = m.rewardName || '';
+  const missionTitle = m.title || 'Nhiệm vụ vượt link kiếm thưởng';
+  const expiresAt = Number(m.expiresAt) || (Date.now() + 15*60*1000);
+
+  const html = `<!DOCTYPE html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${theme.icon} Xác thực nhiệm vụ — ${theme.name}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#05050f;color:#f7f5ff;min-height:100vh;display:grid;place-items:center;padding:16px;overflow-x:hidden;
+background-image:
+  radial-gradient(ellipse at 0% 0%, ${theme.color}33, transparent 45%),
+  radial-gradient(ellipse at 100% 100%, ${theme.color2}33, transparent 45%),
+  radial-gradient(ellipse at 50% 50%, rgba(116,55,210,.15), transparent 60%)}
+body:before{content:"";position:fixed;inset:0;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:44px 44px;opacity:.06;pointer-events:none}
+.box{position:relative;max-width:480px;width:100%;border-radius:28px;padding:34px 28px 30px;
+background:linear-gradient(160deg,rgba(20,20,45,.92),rgba(12,12,30,.96));
+border:1px solid rgba(255,255,255,.08);
+box-shadow:0 30px 80px rgba(0,0,0,.6), 0 0 0 1px ${theme.glow} inset;
+overflow:hidden}
+.box:before{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+background:conic-gradient(from 0deg, transparent, ${theme.color}22, transparent, ${theme.color2}22, transparent);
+animation:rotate 8s linear infinite;z-index:-1}
+@keyframes rotate{to{transform:rotate(360deg)}}
+.box:after{content:"";position:absolute;inset:1px;border-radius:27px;background:linear-gradient(160deg,rgba(20,20,45,.92),rgba(12,12,30,.96));z-index:-1}
+
+.header{text-align:center;margin-bottom:22px;position:relative;z-index:1}
+.provider-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:99px;
+background:linear-gradient(110deg,${theme.color},${theme.color2});color:#fff;font-size:12px;font-weight:800;letter-spacing:.8px;
+box-shadow:0 8px 24px ${theme.glow}}
+.provider-badge .dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.provider-tag{margin-top:10px;font-size:10px;letter-spacing:3px;color:${theme.color};font-weight:700;opacity:.85}
+.title{font-size:20px;font-weight:800;margin-top:14px;letter-spacing:.3px}
+.title b{background:linear-gradient(110deg,${theme.color},${theme.color2});-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.info-grid{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1}
+.info-item{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:11px 13px}
+.info-item.full{grid-column:1/-1}
+.info-label{font-size:10px;color:#9ca3c7;letter-spacing:.6px;text-transform:uppercase;font-weight:600;margin-bottom:5px}
+.info-value{font-size:13px;font-weight:700;color:#fff;word-break:break-word}
+.info-value.mono{font-family:ui-monospace,'Courier New',monospace;color:${theme.color};font-size:13px;letter-spacing:.5px}
+.info-value.green{color:#6ee7b7}
+.info-value.amber{color:#fbbf24}
+
+/* System Grid HACKER UI */
+.sys-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; position: relative; z-index: 1; }
+.sys-item { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.06); padding: 9px 12px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+.sys-label { font-size: 10px; color: #9ca3c7; }
+.sys-val { font-size: 11px; font-family: ui-monospace, 'Courier New', monospace; color: #fff; font-weight: 700; }
+.terminal { margin-top: 14px; background: rgba(5,5,15,0.7); border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 15px rgba(0,0,0,0.8); border-radius: 12px; padding: 12px 14px; height: 105px; overflow-y: auto; font-family: ui-monospace, 'Courier New', monospace; font-size: 10px; color: #4ade80; line-height: 1.6; position: relative; z-index: 1; text-align: left; scroll-behavior: smooth; }
+.terminal::-webkit-scrollbar { width: 4px; }
+.terminal::-webkit-scrollbar-thumb { background: #4ade80; border-radius: 4px; }
+.terminal p { margin: 0 0 4px 0; opacity: 0.85; }
+.terminal p::before { content: "[SYS]> "; color: ${theme.color}; }
+
+.ring-wrap{margin:26px auto 20px;position:relative;width:170px;height:170px}
+.ring-svg{transform:rotate(-90deg);width:100%;height:100%}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:10}
+.ring-fg{fill:none;stroke:url(#grad);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1s linear;filter:drop-shadow(0 0 6px ${theme.glow})}
+.ring-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-num{font-size:44px;font-weight:900;font-family:ui-monospace,'Courier New',monospace;
+background:linear-gradient(110deg,${theme.color},${theme.color2});-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.ring-label{font-size:11px;color:#9ca3c7;letter-spacing:1.5px;margin-top:4px;font-weight:600}
+
+.status-text{text-align:center;color:#9ca3c7;font-size:13px;line-height:1.6;margin-bottom:16px;position:relative;z-index:1}
+
+.code-box{display:none;margin-top:6px;position:relative;z-index:1}
+.code-title{font-size:11px;color:#9ca3c7;letter-spacing:2px;text-transform:uppercase;text-align:center;margin-bottom:10px;font-weight:700}
+.code-display{font-family:ui-monospace,'Courier New',monospace;font-size:22px;font-weight:900;letter-spacing:3px;
+color:${theme.color};background:linear-gradient(160deg,rgba(0,0,0,.6),rgba(0,0,0,.4));padding:18px 14px;border-radius:14px;text-align:center;word-break:break-all;
+border:1.5px solid ${theme.color}55;box-shadow:0 0 30px ${theme.glow} inset, 0 0 20px ${theme.glow}22;animation:glow 2s infinite alternate}
+@keyframes glow{from{box-shadow:0 0 30px ${theme.glow} inset,0 0 20px ${theme.glow}22}to{box-shadow:0 0 40px ${theme.glow} inset,0 0 30px ${theme.glow}44}}
+
+.btn{display:block;width:100%;padding:16px;border-radius:14px;border:0;cursor:pointer;
+background:linear-gradient(110deg,${theme.color},${theme.color2});color:#fff;font-weight:800;font-size:15px;letter-spacing:.5px;
+margin-top:14px;box-shadow:0 10px 30px ${theme.glow};transition:.2s;position:relative;z-index:1}
+.btn:hover{filter:brightness(1.15);transform:translateY(-2px);box-shadow:0 14px 36px ${theme.glow}}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-copy{background:linear-gradient(110deg,#10b981,#059669);box-shadow:0 10px 30px rgba(16,185,129,.4)}
+.btn-copy:hover{box-shadow:0 14px 36px rgba(16,185,129,.55)}
+
+.footer-note{text-align:center;font-size:11px;color:#6b7280;margin-top:18px;line-height:1.6;position:relative;z-index:1}
+.footer-note b{color:${theme.color}}
+</style></head>
+<body><div class="box">
+
+<div class="header">
+  <div class="provider-badge"><span class="dot"></span>${theme.icon} ${theme.name.toUpperCase()}</div>
+  <div class="provider-tag">${theme.tag}</div>
+  <h1 class="title">XÁC THỰC <b>NHIỆM VỤ</b></h1>
+</div>
+
+<div class="info-grid">
+  <div class="info-item full">
+    <div class="info-label">📋 Tên nhiệm vụ</div>
+    <div class="info-value">${escapeHtml(missionTitle)}</div>
+  </div>
+  <div class="info-item">
+    <div class="info-label">🎁 Phần thưởng</div>
+    <div class="info-value green">${escapeHtml(rewardName || 'Đang cập nhật')}</div>
+  </div>
+  <div class="info-item">
+    <div class="info-label">⏱ Hết hạn sau</div>
+    <div class="info-value amber" id="expireCount">15:00</div>
+  </div>
+</div>
+
+<div class="sys-grid">
+  <div class="sys-item"><span class="sys-label">Bảo mật</span><span class="sys-val" style="color:#6ee7b7">Secure ✓</span></div>
+  <div class="sys-item"><span class="sys-label">Mã hóa</span><span class="sys-val">AES-256</span></div>
+  <div class="sys-item"><span class="sys-label">Client IP</span><span class="sys-val" id="fakeIp">Đang quét...</span></div>
+  <div class="sys-item"><span class="sys-label">Ping tới Node</span><span class="sys-val" id="fakePing">24ms</span></div>
+</div>
+
+<div class="terminal" id="termLog">
+  <p>Khởi tạo kết nối an toàn tới [${theme.name}]...</p>
+</div>
+
+<div class="ring-wrap" id="ringWrap">
+  <svg class="ring-svg" viewBox="0 0 170 170">
+    <defs>
+      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="${theme.color}"/>
+        <stop offset="100%" stop-color="${theme.color2}"/>
+      </linearGradient>
+    </defs>
+    <circle class="ring-bg" cx="85" cy="85" r="75"/>
+    <circle class="ring-fg" cx="85" cy="85" r="75" id="ringFg" stroke-dasharray="471.24" stroke-dashoffset="0"/>
+  </svg>
+  <div class="ring-content">
+    <div class="ring-num" id="ringNum">60</div>
+    <div class="ring-label">GIÂY</div>
+  </div>
+</div>
+
+<div class="status-text" id="statusText">Vui lòng chờ trong giây lát để hệ thống xác thực...</div>
+
+<div class="code-box" id="codeBox">
+  <div class="code-title">✦ Mã của bạn ✦</div>
+  <div class="code-display" id="codeDisplay">${escapeHtml(code)}</div>
+  <button class="btn btn-copy" id="copyBtn">📋 SAO CHÉP MÃ</button>
+</div>
+
+<div class="footer-note" id="footerNote">
+  Sau khi nhận mã, quay lại tab chính và dán vào <b>Bước 3</b> để nhận thưởng.
+</div>
+
+</div>
+<script>
+(function(){
+  var code = ${JSON.stringify(code)};
+  var claimUrl = ${JSON.stringify(claimUrl)};
+  var expiresAt = ${expiresAt};
+  var remain = 60, total = 60;
+  var CIRC = 2 * Math.PI * 75;
+
+  var ringFg = document.getElementById('ringFg');
+  var ringNum = document.getElementById('ringNum');
+  var statusText = document.getElementById('statusText');
+  var codeBox = document.getElementById('codeBox');
+  var ringWrap = document.getElementById('ringWrap');
+  var footerNote = document.getElementById('footerNote');
+  var expireEl = document.getElementById('expireCount');
+  
+  // Fake Terminal Logic
+  document.getElementById('fakeIp').textContent = '103.' + Math.floor(Math.random()*255) + '.' + Math.floor(Math.random()*255) + '.XX';
+  var term = document.getElementById('termLog');
+  var logs = [
+    "Đang quét danh tính IP Client...",
+    "Thiết lập kênh truyền tải token...",
+    "Đồng bộ hóa dữ liệu nhiệm vụ ID [" + code.split('-')[1] + "]...",
+    "Trạng thái máy chủ: Ổn định. Tải: " + Math.floor(Math.random()*30+5) + "%...",
+    "Khởi tạo token: " + code.substring(0,8) + "********...",
+    "Kiểm tra Anti-bot & Captcha: Đã vượt qua.",
+    "Tiến hành Bypass các lớp bảo vệ mạng...",
+    "Đang chờ hết thời gian Countdown Gateway..."
+  ];
+  var logIdx = 0;
+
+  ringFg.setAttribute('stroke-dasharray', CIRC);
+  ringFg.style.strokeDashoffset = '0';
+
+  var expireTimer = setInterval(function(){
+    var d = expiresAt - Date.now();
+    if(d <= 0){ expireEl.textContent = 'HẾT HẠN'; return; }
+    var mm = Math.floor(d/60000), ss = Math.floor((d%60000)/1000);
+    expireEl.textContent = (mm<10?'0':'')+mm+':'+(ss<10?'0':'')+ss;
+  }, 1000);
+
+  var t = setInterval(function(){
+    remain--;
+    
+    if(Math.random() > 0.4) {
+      document.getElementById('fakePing').textContent = Math.floor(Math.random() * 50 + 12) + 'ms';
+    }
+    if(remain % 5 === 0 && logIdx < logs.length) {
+      var p = document.createElement('p');
+      p.textContent = logs[logIdx++];
+      term.appendChild(p);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    if(remain <= 0){
+      clearInterval(t);
+      ringWrap.style.display = 'none';
+      statusText.style.display = 'none';
+      codeBox.style.display = 'block';
+      
+      var pDone = document.createElement('p');
+      pDone.textContent = "✅ Hoàn tất xác thực. Đã xuất mã token.";
+      pDone.style.color = "#10b981";
+      term.appendChild(pDone);
+      term.scrollTop = term.scrollHeight;
+
+      footerNote.innerHTML = 'Đã lấy mã thành công! Quay lại tab chính và dán vào <b>Bước 3</b>.';
+      if(claimUrl){ setTimeout(function(){ location.href = claimUrl; }, 2000); }
+      return;
+    }
+    ringNum.textContent = remain;
+    var offset = CIRC * (1 - remain/total);
+    ringFg.style.strokeDashoffset = offset;
+    statusText.textContent = 'Đang xác thực... còn ' + remain + ' giây';
+  }, 1000);
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var btn = this;
+    var done = function(){
+      btn.textContent = '✅ ĐÃ COPY — Quay lại tab chính';
+      btn.style.background = 'linear-gradient(110deg,#10b981,#059669)';
+      setTimeout(function(){
+        btn.textContent = '📋 SAO CHÉP MÃ';
+        btn.style.background = '';
+      }, 2500);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(code).then(done).catch(function(){ fallback(); });
+    } else { fallback(); }
+    function fallback(){
+      var x = document.createElement('textarea');
+      x.value = code; document.body.appendChild(x); x.select();
+      try{ document.execCommand('copy'); done(); }catch(e){}
+      x.remove();
+    }
+  });
+})();
+<\/script>
+</body></html>`;
+
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  return URL.createObjectURL(blob);
+}
+
+function toast(msg,type='info'){
+ const el=document.createElement('div');
+ el.className='toast glass rounded-xl px-4 py-3 text-sm border '+(type==='success'?'border-emerald-300/30':type==='error'?'border-rose-300/30':'border-cyan-300/20');
+ el.textContent=msg;
+ $('toastArea').appendChild(el);
+ setTimeout(()=>el.remove(),3300);
+}
+
+function beep(win=false){
+ if(!soundOn)return;
+ try{
+  const ctx=new (window.AudioContext||window.webkitAudioContext)();
+  const notes=win?[523,659,784,1046]:[220,330];
+  notes.forEach((f,i)=>{
+   const o=ctx.createOscillator(),g=ctx.createGain();
+   o.type=win?'sine':'triangle';o.frequency.value=f;
+   g.gain.setValueAtTime(.0001,ctx.currentTime+i*.08);
+   g.gain.exponentialRampToValueAtTime(win?.12:.045,ctx.currentTime+i*.08+.015);
+   g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+i*.08+.18);
+   o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+i*.08);o.stop(ctx.currentTime+i*.08+.2);
+  });
+  setTimeout(()=>ctx.close(),900);
+ }catch(e){}
+}
+
+let globalLiveEvents = [
+ {detail:'Minh Anh_54 vừa vượt link Link4M',delta:50,currency:'KC',status:'Thành công ✓',ts:Date.now()-15000},
+ {detail:'Quốc Bảo_18 vừa đặt lệnh rút 50k VNĐ',delta:-50,currency:'HH',status:'⏳ Đang chờ',ts:Date.now()-38000}
+];
+
+// HISTORY WITH SYNC
+function addHistory(type,game,detail,delta,currency,status='Thành công ✓',id){
+ const item = {
+  id: id || 'ST-'+Math.random().toString(36).slice(2,9).toUpperCase(),
+  type, game, detail, delta, currency, status,
+  time: new Date().toLocaleString('vi-VN'),
+  ts: Date.now(), user: currentUser, isOwn: true
+ };
+ state.history.unshift(item);
+ if(state.history.length > 200) state.history.length = 200;
+ saveState(); renderHistory();
+ globalLiveEvents.unshift({detail:`${currentUser}: ${detail}`,delta,currency,status,ts:Date.now()});
+ if(globalLiveEvents.length > 30) globalLiveEvents.length = 30;
+ renderLiveFeed();
+ return item;
+}
+
+// UPDATE SPECIFIC HISTORY ITEM (FOR APPROVALS)
+function updateHistoryStatus(id, newStatus, user) {
+    // If not current user, we can't update localStorage directly for them in pure frontend,
+    // but we can update our view. Realistically a backend handles this. We update if it's us.
+    if(user === currentUser) {
+        let h = state.history.find(x => x.id === id);
+        if(h) {
+            h.status = newStatus;
+            saveState();
+            renderHistory();
+        }
+    }
+}
+
+
+function getAllCurrencies(){
+ const merged = structuredClone(DEFAULT_CURRENCIES);
+ if(settings.sysConfig && settings.sysConfig.currencyNames) {
+     for(let k in merged) {
+         if(settings.sysConfig.currencyNames[k]) {
+             merged[k].name = settings.sysConfig.currencyNames[k].name || merged[k].name;
+             merged[k].short = settings.sysConfig.currencyNames[k].name || merged[k].short;
+             merged[k].icon = settings.sysConfig.currencyNames[k].icon || merged[k].icon;
+         }
+     }
+ }
+ (settings.customRewards || []).forEach(r => {
+  merged[r.id] = { name: r.name, short: r.short || r.id, icon: r.icon || '🎁', color: r.color || 'text-amber-300' };
+ });
+ return merged;
+}
+
+function applySystemConfigUI() {
+    if(!settings.sysConfig) return;
+    
+    const m = settings.sysConfig.siteName?.main || 'NEBULA';
+    const s = settings.sysConfig.siteName?.sub || 'QUEST';
+    if($('siteTitleMain')) $('siteTitleMain').textContent = m;
+    if($('siteTitleSub')) $('siteTitleSub').textContent = s;
+    if($('siteSlogan')) $('siteSlogan').textContent = settings.sysConfig.siteName?.slogan || 'GAME REWARD HUB';
+    document.title = `${m} ${s} — Game Reward Hub`;
+    
+    if(settings.sysConfig.marquee?.enabled) {
+        $('marqueeWrap').classList.remove('hidden');
+        $('marqueeText').innerHTML = `<span>${escapeHtml(settings.sysConfig.marquee.text)}</span><span>${escapeHtml(settings.sysConfig.marquee.text)}</span>`;
+    } else {
+        $('marqueeWrap').classList.add('hidden');
+    }
+    
+    if(settings.sysConfig.tabNames) {
+        if($('navTab-mission')) $('navTab-mission').innerHTML = settings.sysConfig.tabNames.mission || '⚡ Vượt nhiệm vụ';
+        if($('navTab-withdraw')) $('navTab-withdraw').innerHTML = settings.sysConfig.tabNames.withdraw || '🎁 Rút vật phẩm';
+        if($('navTab-shop')) $('navTab-shop').innerHTML = settings.sysConfig.tabNames.shop || '🛍️ Shop quà tặng';
+        if($('navTab-history')) $('navTab-history').innerHTML = settings.sysConfig.tabNames.history || '📜 Lịch sử';
+        if($('navTab-leaderboard')) $('navTab-leaderboard').innerHTML = settings.sysConfig.tabNames.leaderboard || '🏆 BXH';
+        if($('navTab-admin')) $('navTab-admin').innerHTML = settings.sysConfig.tabNames.admin || '⚙️ Quản trị';
+    }
+
+    const allCur = getAllCurrencies();
+    document.querySelectorAll('.cashoutUnitUI').forEach(el => {
+        if(allCur.HH) el.textContent = allCur.HH.short;
+    });
+    if($('cashoutTitleUI') && allCur.HH) {
+        $('cashoutTitleUI').textContent = `${allCur.HH.icon} Đổi ${allCur.HH.short} ra VNĐ`;
+    }
+}
+
+function syncMissionCurrencyDropdown(){
+ const sel = $('missionCurrency');
+ if(!sel) return;
+ const cur = sel.value;
+ const all = getAllCurrencies();
+ sel.innerHTML = Object.entries(all).map(([k,v]) => `<option value="${k}">${v.icon} ${v.name} (${v.short})</option>`).join('') + '<option value="GIFT">🎁 Quà tặng Admin</option>';
+ if(all[cur]) sel.value = cur;
+ updateMissionRewardView();
+}
+
+function getTotalSystemMissions(){
+ const entries = Object.entries(state.leaderboard || {});
+ return Math.max(Number(state.missions)||0, entries.reduce((s,e) => s + (Number(e[1])||0), 0));
+}
+
+// TỶ LỆ QUY ĐỔI CHI PHÍ: 1.000đ = 10 KC/QH/FC/Robux (1 đơn vị game = 100đ); 1 HH = 1.000đ
+function calculateVndCost(amount, currency){
+ const n = Number(amount) || 0;
+ if(currency === 'HH') return n * CASHOUT_RATE;
+ return Math.round(n * 100);
+}
+
+function renderAdminRevenue(){
+ if(!adminOn) return;
+ const rate = Number(settings.revenuePerLink) || 10000;
+ if($('revRateInput')) $('revRateInput').value = rate;
+ const myMissions = Number(state.missions) || 0;
+ const totalMissions = getTotalSystemMissions();
+ const grossRev = totalMissions * rate;
+ const totalPayout = Number(settings.totalPayoutVnd) || 0;
+ const netRev = grossRev - totalPayout;
+
+ if($('adminMyPassCount')) $('adminMyPassCount').textContent = fmt(myMissions) + ' link';
+ if($('adminMyRevVnd')) $('adminMyRevVnd').textContent = fmt(myMissions * rate) + ' đ';
+ if($('adminTotalPassCount')) $('adminTotalPassCount').textContent = fmt(totalMissions) + ' link';
+ if($('adminGrossRevVnd')) $('adminGrossRevVnd').textContent = fmt(grossRev) + ' đ';
+ if($('adminPayoutRevVnd')) $('adminPayoutRevVnd').textContent = '-' + fmt(totalPayout) + ' đ';
+ if($('adminTotalRevVnd')) $('adminTotalRevVnd').textContent = fmt(netRev) + ' đ';
+}
+
+function renderCustomRewardManager(){
+ const box = $('customRewardList');
+ if(!box) return;
+ const list = settings.customRewards || [];
+ if(!list.length){
+  box.innerHTML = '<div class="text-xs muted p-3 text-center rounded-xl bg-white/[.02]">Chưa có mục.</div>';
+  return;
+ }
+ box.innerHTML = list.map(item => `
+  <div class="flex flex-wrap justify-between items-center gap-2 p-3 rounded-xl bg-white/[.03] border border-white/5">
+   <div class="flex items-center gap-2.5">
+    <div class="w-8 h-8 rounded-lg bg-white/[.06] grid place-items-center">${escapeHtml(item.icon)}</div>
+    <div>
+      <div class="font-bold text-xs">${escapeHtml(item.name)} (${escapeHtml(item.id)})</div>
+      <div class="text-[10px] muted">+${fmt(item.reward)} · ${fmt(item.limit)}/ngày</div>
+    </div>
+   </div>
+   <button class="btn-ghost rounded-lg px-2.5 py-1 text-xs text-rose-300" data-del-custom="${escapeHtml(item.id)}">Xóa</button>
+  </div>`).join('');
+}
+
+function updateCashoutPreview(){
+ const amt = Number($('cashoutAmount')?.value) || 0;
+ if($('cashoutPreview')) $('cashoutPreview').textContent = fmt(amt * CASHOUT_RATE) + ' đ';
+}
+
+function renderWallet(){
+ const root=$('walletHeader');root.innerHTML='';
+ const all = getAllCurrencies();
+ Object.entries(all).forEach(([k,v])=>{
+  const card=document.createElement('div');
+  card.className='wallet rounded-xl px-3 py-2';
+  card.innerHTML=`<div class="flex items-center justify-between"><span class="text-[10px] muted">${v.icon} ${v.short}</span><span class="w-1.5 h-1.5 rounded-full bg-cyan-300"></span></div><div class="orbit font-bold text-sm mt-1 ${v.color}">${fmt(state.wallet[k]||0)}</div>`;
+  root.appendChild(card);
+ });
+ $('accountName').textContent=currentUser;
+ if($('hhBalance')) $('hhBalance').textContent=fmt(state.wallet.HH||0);
+ 
+ if($('cashoutAmount')) {
+   const minHH = settings.minCashoutRates?.HH || 100;
+   $('cashoutAmount').min = minHH;
+   if(Number($('cashoutAmount').value) < minHH) {
+       $('cashoutAmount').value = minHH;
+   }
+ }
+ 
+ renderSlotOverview();
+ updateCashoutPreview();
+}
+
+// Dữ liệu gói game và ngân hàng cho bot ảo
+const BOT_GAMES = [
+  { game: 'ff', name: 'Free Fire', pack: '100 Kim Cương', cur: 'KC', cost: 100 },
+  { game: 'ff', name: 'Free Fire', pack: '310 Kim Cương', cur: 'KC', cost: 310 },
+  { game: 'lq', name: 'Liên Quân', pack: '100 Quân Huy', cur: 'QH', cost: 100 },
+  { game: 'rb', name: 'Roblox', pack: '80 Robux', cur: 'Robux', cost: 80 },
+  { game: 'fc', name: 'FC Online', pack: '100 FC Points', cur: 'FC', cost: 100 }
+];
+const BOT_BANKS = ['MB Bank', 'Techcombank', 'Vietcombank', 'MoMo', 'BIDV', 'ACB', 'VPBank'];
+
+// BOTS AUTO CÀY LINK & TỰ ĐỘNG GỬI LỆNH RÚT VÀO HÀNG DUYỆT ADMIN
+function simulateFakeUsers(){
+ if(!state||!settings.fake.enabled) return;
+ const keys=Object.keys(DEFAULT_CURRENCIES).filter(k => k !== 'HH');
+ const allCur = getAllCurrencies();
+ let needSave = false;
+
+ // Cứ mỗi chu kỳ (chỉnh được số giây trong Admin): cày mất số link ngẫu nhiên theo cấu hình
+ const minL = Math.max(1, Number(settings.fake.minLinks) || 3);
+ const maxL = Math.max(minL, Number(settings.fake.maxLinks) || 5);
+ const linkCount = Math.floor(Math.random() * (maxL - minL + 1)) + minL;
+
+ for(let i = 0; i < linkCount; i++){
+  // Chọn ngẫu nhiên loại tiền còn lượt link
+  const availableKeys = keys.filter(k => (state.daily.used[k] || 0) < (settings.dailyLimits[k] || 100));
+  const cur = availableKeys.length ? availableKeys[Math.floor(Math.random() * availableKeys.length)] : keys[Math.floor(Math.random() * keys.length)];
+  
+  // Trừ lượt link của ngày (mất lượt link)
+  if(!state.daily.used[cur]) state.daily.used[cur] = 0;
+  state.daily.used[cur]++;
+
+  const baseName = FAKE_NAMES[Math.floor(Math.random()*FAKE_NAMES.length)];
+  const botUser = baseName + '_' + Math.floor(10 + Math.random()*90);
+  const reward = settings.defaultRewards[cur] || 50;
+  const cName = allCur[cur] ? allCur[cur].short : cur;
+
+  // Tăng điểm trên Bảng Xếp Hạng
+  state.leaderboard[baseName] = (state.leaderboard[baseName]||0) + 1;
+
+  // Bắn thông báo hoàn thành link
+  globalLiveEvents.unshift({
+    detail: `${botUser} vừa hoàn thành nhiệm vụ link`,
+    delta: reward,
+    currency: cur,
+    status: 'Thành công ✓',
+    ts: Date.now() - Math.floor(Math.random() * 5000)
+  });
+  needSave = true;
+ }
+
+ // TĂNG LỆNH RÚT TƯƠNG XỨNG THEO LƯỢNG LINK CÀY (CHỈ RÚT TIỀN GAME THỰC TẾ: KC, QH, ROBUX, FC - LOẠI BỎ HOÀN TOÀN HH)
+ const withdrawSpawns = Math.max(1, Math.min(10, Math.floor(linkCount / 3)));
+ for(let w = 0; w < withdrawSpawns; w++){
+  const baseName = FAKE_NAMES[Math.floor(Math.random()*FAKE_NAMES.length)];
+  const botUser = baseName + '_' + Math.floor(10 + Math.random()*90);
+  const transId = 'ST-BOT-' + Math.random().toString(36).slice(2,7).toUpperCase();
+  const timeNow = new Date().toLocaleString('vi-VN');
+
+  // 100% bot chỉ rút các gói game có trong hệ thống nhiệm vụ
+  const pack = BOT_GAMES[Math.floor(Math.random()*BOT_GAMES.length)];
+  const fakeUid = Math.floor(100000000 + Math.random()*900000000);
+
+  const withdrawReq = {
+    id: transId,
+    user: botUser,
+    time: timeNow,
+    detail: `Rút gói ${pack.pack} - Game: ${pack.name} - ID: ${fakeUid}`,
+    amount: pack.cost,
+    currency: pack.cur,
+    isBot: true
+  };
+
+  globalLiveEvents.unshift({
+    detail: `${botUser} tạo lệnh rút ${pack.pack}`,
+    delta: -pack.cost,
+    currency: pack.cur,
+    status: '⏳ Đang chờ duyệt',
+    ts: Date.now()
+  });
+
+  if(withdrawReq){
+    // Mở rộng sức chứa hàng đợi phê duyệt lên đến 100 phiếu rút
+    if(globalPendingApprovals.length >= 100){
+      globalPendingApprovals.pop();
+    }
+    globalPendingApprovals.unshift(withdrawReq);
+    savePending();
+    needSave = true;
+  }
+ }
+ if(adminOn) renderAdminApprovals();
+
+ if(needSave){
+  if(globalLiveEvents.length > 30) globalLiveEvents.length = 30;
+  saveState();
+  renderSlotOverview();
+  renderLeaderboard();
+  renderLiveFeed();
+  if(adminOn) renderAdmin();
+ }
+}
+
+
+// BOT TỰ ĐỘNG DUYỆT LỆNH (MẶC ĐỊNH 5S / 1 LỆNH)
+let autoApproveTimer = null;
+function scheduleAutoApprove(){
+ if(autoApproveTimer) clearTimeout(autoApproveTimer);
+ const sec = Math.max(1, Number(settings.autoApprove?.speed) || 5);
+ autoApproveTimer = setTimeout(()=>{
+   runAutoApproveStep();
+   scheduleAutoApprove();
+ }, sec * 1000);
+}
+
+function runAutoApproveStep(){
+ if(!settings.autoApprove?.enabled || !globalPendingApprovals.length) return;
+ 
+ // Lấy lệnh cũ nhất trong hàng đợi (từ dưới lên) để duyệt công bằng
+ const req = globalPendingApprovals.pop();
+ const costVnd = calculateVndCost(req.amount, req.currency);
+
+ // Trừ doanh thu admin đúng tỷ lệ 1k = 10 game / 1 HH = 1.000 VNĐ
+ settings.totalPayoutVnd = (Number(settings.totalPayoutVnd) || 0) + costVnd;
+ saveSettings();
+ savePending();
+
+ updateHistoryStatus(req.id, 'Thành công ✓', req.user);
+
+ const allCur = getAllCurrencies();
+ const cName = allCur[req.currency] ? allCur[req.currency].short : req.currency;
+
+ globalLiveEvents.unshift({
+   detail: `🤖 [AUTO DUYỆT] Đã duyệt đơn ${req.id} cho ${req.user} (-${fmt(costVnd)}đ doanh thu)`,
+   delta: -req.amount,
+   currency: req.currency,
+   status: 'Thành công ✓',
+   ts: Date.now()
+ });
+
+ if(globalLiveEvents.length > 30) globalLiveEvents.length = 30;
+
+ if(adminOn){
+   renderAdminApprovals();
+   renderAdminRevenue();
+ }
+ renderLiveFeed();
+}
+
+let fakeTimer = null;
+function scheduleFakeUsers(){
+ if(fakeTimer) clearTimeout(fakeTimer);
+ const sec = Math.max(1, Number(settings.fake.speed) || 30);
+ fakeTimer = setTimeout(()=>{
+   simulateFakeUsers();
+   scheduleFakeUsers();
+scheduleAutoApprove();
+ }, sec * 1000);
+}
+
+function renderLiveFeed(){
+ const root=$('liveFeed');if(!root)return;
+ const list=globalLiveEvents.slice(0,6);
+ if(!list.length){root.innerHTML='<div class="text-xs muted p-2">Chưa có hoạt động.</div>';return;}
+ const allCur = getAllCurrencies();
+ root.innerHTML=list.map(x=>{
+  const sec=Math.max(0,Math.floor((Date.now()-(x.ts||Date.now()))/1000));
+  const rel=sec<5?'vừa xong':sec<60?sec+'s trước':Math.floor(sec/60)+' phút trước';
+  const cName = allCur[x.currency] ? allCur[x.currency].short : x.currency;
+  const isPending = x.status.includes('⏳');
+  return `<div class="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-white/[.03] border border-white/5"><div class="min-w-0"><div class="text-xs font-semibold truncate">${escapeHtml(x.detail)}</div><div class="text-[10px] muted">${rel} · ${x.delta>0?'+':''}${fmt(x.delta)} ${escapeHtml(cName)}</div></div><span class="badge shrink-0 ${isPending?'text-amber-300 border-amber-400/30':'text-emerald-300 border-emerald-400/30'}">${escapeHtml(x.status)}</span></div>`;
+ }).join('');
+}
+
+function renderLeaderboard(){
+ if(!state)return;
+ const list=$('leaderboardList');if(!list)return;
+ const entries=Object.entries(state.leaderboard||{}).sort((a,b)=>b[1]-a[1]);
+ const top=entries.slice(0,10), total=entries.reduce((s,e)=>s+e[1],0);
+ const myRank=entries.findIndex(e=>e[0]===currentUser)+1, myCount=state.leaderboard[currentUser]||0;
+ if($('leaderboardStats')) $('leaderboardStats').innerHTML=`<div class="wallet rounded-xl px-3 py-2"><div class="text-[10px] muted">Người tham gia</div><div class="orbit font-bold text-cyan-200">${fmt(entries.length)}</div></div><div class="wallet rounded-xl px-3 py-2"><div class="text-[10px] muted">Tổng link</div><div class="orbit font-bold text-violet-200">${fmt(total)}</div></div><div class="wallet rounded-xl px-3 py-2"><div class="text-[10px] muted">Hạng của bạn</div><div class="orbit font-bold text-lime-200">${myRank?`#${myRank} · ${fmt(myCount)}`:'Chưa có'}</div></div>`;
+ if(!top.length){list.innerHTML='<p class="muted text-xs">Chưa có dữ liệu.</p>';return;}
+ list.innerHTML=top.map(([name,count],i)=>{
+  const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
+  const pct=Math.max(8,Math.round(count/top[0][1]*100));
+  return `<div class="flex items-center gap-3 p-3 rounded-xl ${name===currentUser?'bg-cyan-300/10 border border-cyan-300/20':'bg-white/[.03] border border-white/5'}"><div class="w-9 text-center font-bold">${medal}</div><div class="flex-1 min-w-0"><div class="flex justify-between gap-2 text-sm font-semibold"><span class="truncate">${escapeHtml(name)}${name===currentUser?' (bạn)':''}</span><span>${fmt(count)}</span></div><div class="progress mt-1.5"><div style="width:${pct}%"></div></div></div></div>`;
+ }).join('');
+}
+
+function renderMissionProgress(){
+ if(!state)return;
+ const lv=Math.floor((state.missions||0)/10)+1, prog=(state.missions||0)%10;
+ if($('levelBadge')) $('levelBadge').textContent=`⭐ Lv.${lv} · ${prog}/10`;
+ if($('streakBadge')) $('streakBadge').textContent=`🔥 Chuỗi ${state.streak||0} ngày`;
+ if($('missionCountBadge')) $('missionCountBadge').textContent=`${fmt(state.missions||0)} link`;
+}
+
+function renderSlotOverview(){
+ const root=$('slotOverview');if(!root)return;
+ const all = getAllCurrencies();
+ root.innerHTML=Object.keys(all).map(k=>{
+  const used=state.daily.used[k]||0, limit=settings.dailyLimits[k]||0, left=Math.max(0,limit-used);
+  return `<span class="badge ${left<=0?'border-rose-300/40 text-rose-200':''}">${all[k].icon} ${all[k].short} ${fmt(left)}/${fmt(limit)}</span>`;
+ }).join('');
+}
+
+function gameName(g){return ({ff:'Free Fire',lq:'Liên Quân',rb:'Roblox',fc:'FC Online'})[g]||g;}
+
+function renderShop(){
+ const root=$('shopGrid');if(!root)return;
+ const q=($('shopSearch')?.value||'').trim().toLowerCase(), gf=$('shopGameFilter')?.value||'all';
+ const items=state.shop.filter(it=>(gf==='all'||it.game===gf)&&(!q||(it.name||'').toLowerCase().includes(q)||(it.desc||'').toLowerCase().includes(q)));
+ if($('shopResultCount')) $('shopResultCount').textContent=`${items.length} vật phẩm`;
+ root.innerHTML='';
+ if(!items.length){root.innerHTML='<div class="glass rounded-2xl p-10 text-center muted text-sm col-span-full">Không có vật phẩm.</div>';return;}
+ items.forEach(item=>{
+  const cur = getAllCurrencies()[item.currency] || DEFAULT_CURRENCIES.KC;
+  const stock = Number.isFinite(item.stock) ? item.stock : 20;
+  const limit = Number.isFinite(item.dailyLimit) ? item.dailyLimit : 3;
+  const bought = state.shopDaily.counts[item.id] || 0;
+  const soldOut = stock <= 0, limitReached = bought >= limit;
+  const el=document.createElement('article');
+  el.className='glass neon-border rounded-2xl p-5 flex flex-col justify-between';
+  el.innerHTML=`
+   <div>
+    <div class="flex items-start justify-between"><div class="w-14 h-14 rounded-2xl bg-white/[.06] grid place-items-center text-3xl">${escapeHtml(item.icon||'🎁')}</div><span class="badge">${escapeHtml(gameName(item.game))}</span></div>
+    <h3 class="font-bold mt-4">${escapeHtml(item.name)}</h3>
+    <p class="muted text-xs mt-2">${escapeHtml(item.desc||'')}</p>
+   </div>
+   <div class="mt-4 pt-3 border-t border-white/10">
+    <div class="text-[10px] muted mb-2">Còn ${fmt(stock)} · Hôm nay ${fmt(bought)}/${fmt(limit)}</div>
+    <div class="flex justify-between items-center"><div><div class="text-[10px] muted">Giá</div><div class="font-bold ${cur.color}">${fmt(item.price)} ${cur.short}</div></div><button class="btn rounded-xl px-4 py-2 text-xs font-bold" ${soldOut||limitReached?'disabled':''} data-buy="${escapeHtml(item.id)}">${soldOut?'Hết hàng':limitReached?'Đủ lượt':'Đổi quà'}</button></div>
+   </div>`;
+  root.appendChild(el);
+ });
+ root.querySelectorAll('[data-buy]').forEach(b=>b.addEventListener('click',()=>buyShop(b.dataset.buy)));
+}
+
+function buyShop(id){
+ const item=state.shop.find(x=>x.id===id);if(!item)return;
+ const stock=Number.isFinite(item.stock)?item.stock:20;
+ const limit=Number.isFinite(item.dailyLimit)?item.dailyLimit:3;
+ const bought=state.shopDaily.counts[id]||0;
+ if(stock<=0){toast('Hết hàng.','error');return;}
+ if(bought>=limit){toast('Đã đạt giới hạn hôm nay.','error');return;}
+ if((state.wallet[item.currency]||0)<item.price){toast('Số dư không đủ.','error');return;}
+ if(!confirm(`Đổi "${item.name}" với ${fmt(item.price)} ${item.currency}?`)) return;
+ state.wallet[item.currency]-=item.price;
+ item.stock=stock-1;
+ state.shopDaily.counts[id]=bought+1;
+ addHistory('shop',gameName(item.game),item.name,-item.price,item.currency,'Đã nhận quà ✓');
+ saveState();renderWallet();renderShop();beep(true);toast('Đổi quà thành công!','success');
+}
+
+
+// ================= ADMIN APPROVAL SYSTEM =================
+
+function renderAdminApprovals() {
+    const box = $('adminPendingList');
+    if(!box) return;
+    
+    if(!globalPendingApprovals.length) {
+        box.innerHTML = '<div class="text-xs muted p-3 text-center rounded-xl bg-white/[.02]">Không có lệnh rút nào đang chờ.</div>';
+        if($('pendingCountBadge')) $('pendingCountBadge').textContent = '0 lệnh';
+        return;
+    }
+    
+    if($('pendingCountBadge')) $('pendingCountBadge').textContent = `${globalPendingApprovals.length} lệnh`;
+    
+    const allCur = getAllCurrencies();
+    
+    box.innerHTML = globalPendingApprovals.map(p => {
+        const cName = allCur[p.currency] ? allCur[p.currency].short : p.currency;
+        return `
+        <div class="flex flex-wrap justify-between items-center gap-3 p-3 rounded-xl bg-black/20 border border-amber-400/20">
+         <div class="min-w-0">
+          <div class="font-bold text-sm text-white">👤 ${escapeHtml(p.user)}</div>
+          <div class="text-xs font-semibold text-cyan-200 mt-1">${escapeHtml(p.detail)}</div>
+          <div class="text-[11px] muted mt-0.5">Số tiền rút: <b class="text-rose-300">-${fmt(p.amount)} ${escapeHtml(cName)}</b></div>
+          <div class="text-[10px] muted mt-1">Mã GD: ${escapeHtml(p.id)} · Lúc: ${escapeHtml(p.time)}</div>
+         </div>
+         <div class="flex gap-2">
+          <button class="btn rounded-lg px-3 py-2 text-xs font-bold bg-emerald-500/20 text-emerald-300" data-approve="${escapeHtml(p.id)}">✓ Duyệt</button>
+          <button class="btn-ghost rounded-lg px-3 py-2 text-xs text-rose-400 border-rose-500/30" data-reject="${escapeHtml(p.id)}">✕ Hủy & Hoàn</button>
+         </div>
+        </div>`;
+    }).join('');
+}
+
+// Bắt sự kiện click Duyệt / Hủy
+document.addEventListener('click', e => {
+    if(!adminOn) return;
+    
+    const approveBtn = e.target.closest('[data-approve]');
+    const rejectBtn = e.target.closest('[data-reject]');
+    
+    if(approveBtn) {
+        const id = approveBtn.dataset.approve;
+        const index = globalPendingApprovals.findIndex(x => x.id === id);
+        if(index > -1) {
+            const req = globalPendingApprovals[index];
+            const costVnd = calculateVndCost(req.amount, req.currency);
+            if(confirm(`Chắc chắn DUYỆT lệnh rút này?\nChi phí quy đổi: -${fmt(costVnd)} VNĐ sẽ được trừ thẳng vào Doanh Thu của Admin.`)) {
+                // Trừ chi phí rút thưởng vào doanh thu của admin (1k = 10 KC/QH/FC)
+                settings.totalPayoutVnd = (Number(settings.totalPayoutVnd) || 0) + costVnd;
+                saveSettings();
+
+                // Cập nhật history status
+                updateHistoryStatus(id, 'Thành công ✓', req.user);
+                
+                globalPendingApprovals.splice(index, 1);
+                savePending();
+                renderAdminApprovals();
+                renderAdminRevenue();
+                beep(true);
+                toast(`Đã duyệt! Trừ -${fmt(costVnd)}đ vào Doanh thu`, 'success');
+            }
+        }
+    }
+    
+    if(rejectBtn) {
+        const id = rejectBtn.dataset.reject;
+        const index = globalPendingApprovals.findIndex(x => x.id === id);
+        if(index > -1) {
+            if(confirm('Chắc chắn HỦY lệnh rút này? Tiền sẽ được hoàn lại cho khách.')) {
+                const req = globalPendingApprovals[index];
+                
+                // Nếu người dùng đang on web, hoàn tiền trực tiếp nếu đúng user
+                if(req.user === currentUser) {
+                    state.wallet[req.currency] = (state.wallet[req.currency] || 0) + req.amount;
+                    updateHistoryStatus(id, 'Đã Hủy & Hoàn Tiền ✕', req.user);
+                    saveState();
+                    renderWallet();
+                } else {
+                    // Logic thực tế cần update DB, ở đây frontend giả lập cập nhật history view.
+                    updateHistoryStatus(id, 'Đã Hủy & Hoàn Tiền ✕', req.user);
+                }
+                
+                globalPendingApprovals.splice(index, 1);
+                savePending();
+                renderAdminApprovals();
+                toast('Đã hủy & hoàn tiền.', 'error');
+            }
+        }
+    }
+});
+
+
+// ================= GIFTCODE SYSTEM =================
+
+function renderAdminGiftcodes(){
+ const box = $('adminGiftcodeList'); if(!box) return;
+ const list = settings.giftcodes || [];
+ if(!list.length){ box.innerHTML = '<div class="text-xs muted p-3 text-center rounded-xl bg-white/[.02]">Chưa có mã giftcode nào.</div>'; return; }
+ const allCur = getAllCurrencies();
+ box.innerHTML = list.map(item => {
+  const cName = allCur[item.currency] ? allCur[item.currency].short : item.currency;
+  return `
+  <div class="flex flex-wrap justify-between items-center gap-3 p-3 rounded-xl bg-white/[.035] border border-pink-400/20">
+   <div>
+    <b class="text-sm text-pink-300 font-mono tracking-wide">${escapeHtml(item.code)}</b>
+    <div class="text-[11px] muted mt-1">Thưởng: <b class="text-white">+${fmt(item.reward)} ${escapeHtml(cName)}</b> · Đã dùng: <b class="text-white">${item.used}</b>/${item.limit}</div>
+   </div>
+   <button class="btn-ghost rounded-lg px-3 py-1.5 text-xs text-rose-300" data-del-gc="${escapeHtml(item.code)}">Xóa</button>
+  </div>`}).join('');
+}
+
+if($('addGiftcodeBtn')) $('addGiftcodeBtn').addEventListener('click', ()=>{
+ openEditor('Tạo Mã Giftcode Mới', [
+  {key: 'code', label: 'Mã Giftcode (Viết liền, vd: TUNA999)', value: 'TUNA' + Math.floor(Math.random()*999)},
+  {key: 'currency', label: 'Loại tiền', type: 'select', value: 'KC', options: Object.entries(getAllCurrencies()).map(([k,v])=>({value:k,label:v.short}))},
+  {key: 'reward', label: 'Số lượng thưởng', type: 'number', min: 1, value: 100},
+  {key: 'limit', label: 'Giới hạn số người nhập', type: 'number', min: 1, value: 100}
+ ], d => {
+  const code = String(d.code).trim().toUpperCase();
+  if(!code) { toast('Bạn chưa nhập mã code.', 'error'); return false; }
+  if(settings.giftcodes.some(x => x.code === code)) { toast('Mã này đã tồn tại.', 'error'); return false; }
+  
+  settings.giftcodes.unshift({
+   code, currency: d.currency, reward: Number(d.reward), limit: Number(d.limit), used: 0
+  });
+  saveSettings(); renderAdminGiftcodes(); beep(true); toast('Đã tạo Giftcode thành công!', 'success'); return true;
+ });
+});
+
+// Lắng nghe nút xóa Giftcode 
+document.addEventListener('click', e => {
+ const del = e.target.closest('[data-del-gc]');
+ if(del && adminOn) {
+     if(confirm('Bạn có chắc muốn xóa Giftcode này?')) {
+      settings.giftcodes = settings.giftcodes.filter(x => x.code !== del.dataset.delGc);
+      saveSettings(); renderAdminGiftcodes(); toast('Đã xóa mã Giftcode.', 'success');
+     }
+ }
+});
+
+if($('openGiftcodeBtn')) $('openGiftcodeBtn').addEventListener('click', () => {
+ $('giftcodeModal').classList.remove('hidden');
+ $('giftcodeInput').value = '';
+ $('giftcodeInput').focus();
+});
+document.querySelectorAll('.closeGiftcode').forEach(btn => btn.addEventListener('click', () => $('giftcodeModal').classList.add('hidden')));
+
+if($('submitGiftcode')) $('submitGiftcode').addEventListener('click', () => {
+ const code = $('giftcodeInput').value.trim().toUpperCase();
+ if(!code) return toast('Vui lòng nhập mã Giftcode!', 'error');
+ if(state.claimedGiftcodes.includes(code)) return toast('Bạn đã nhận quà từ mã này rồi!', 'error');
+
+ const gc = settings.giftcodes.find(x => x.code === code);
+ if(!gc) return toast('Mã Giftcode không tồn tại hoặc đã bị xóa.', 'error');
+ if(gc.used >= gc.limit) return toast('Mã Giftcode này đã hết lượt sử dụng.', 'error');
+
+ // Thành công
+ gc.used++;
+ state.wallet[gc.currency] += gc.reward;
+ state.claimedGiftcodes.push(code);
+ addHistory('shop', 'Giftcode', `Nhập mã: ${code}`, gc.reward, gc.currency, 'Thành công ✓');
+ 
+ saveSettings();
+ saveState();
+ renderWallet();
+ renderHistory();
+ if(adminOn) renderAdminGiftcodes();
+ 
+ $('giftcodeModal').classList.add('hidden');
+ beep(true);
+ const cName = getAllCurrencies()[gc.currency] ? getAllCurrencies()[gc.currency].short : gc.currency;
+ toast(`Nhập Code thành công! Cộng +${fmt(gc.reward)} ${cName}`, 'success');
+});
+
+// ================= END GIFTCODE =================
+
+function renderAdminTextRewards(){
+ const box=$('adminTextRewardList'); if(!box)return;
+ const list=state.textRewards||[];
+ if(!list.length){box.innerHTML='<div class="text-xs muted p-3 text-center rounded-xl bg-white/[.02]">Chưa có quà tặng.</div>';return;}
+ box.innerHTML=list.map(item=>`
+  <div class="flex flex-wrap justify-between items-center gap-3 p-3.5 rounded-xl bg-white/[.03] border border-amber-400/20">
+   <div class="min-w-0">
+    <div class="font-bold text-sm text-white">🎁 ${escapeHtml(item.name)}</div>
+    <div class="text-[11px] muted mt-0.5">Còn: <b class="text-emerald-300">${fmt(item.stock??0)}</b></div>
+    <div class="text-[10px] muted mt-1 break-all">Nội dung: ${escapeHtml((item.content||'').slice(0,80))}${(item.content||'').length>80?'...':''}</div>
+    ${item.claimUrl?`<div class="text-[10px] text-cyan-200 mt-1 break-all">Link: ${escapeHtml(item.claimUrl)}</div>`:''}
+   </div>
+   <div class="flex items-center gap-2">
+    <button class="btn-ghost rounded-lg px-3 py-1.5 text-xs" data-edit-textreward="${escapeHtml(item.id)}">Sửa</button>
+    <button class="btn-ghost rounded-lg px-3 py-1.5 text-xs text-rose-300" data-del-textreward="${escapeHtml(item.id)}">Xóa</button>
+   </div>
+  </div>`).join('');
+}
+
+function editAdminTextReward(item){
+ const x=item||{name:'Quà tặng mới',desc:'',icon:'🎁',stock:10,content:'',claimUrl:''};
+ openEditor(item?'Sửa quà tặng':'Thêm quà tặng mới',[
+  {key:'name',label:'Tên phần quà',value:x.name},
+  {key:'content',label:'Danh sách quà (mỗi dòng = 1 lượt)',type:'textarea',value:x.content||''},
+  {key:'claimUrl',label:'Link đích (không bắt buộc)',value:x.claimUrl||''},
+  {key:'stock',label:'Số lượt tối đa',type:'number',min:0,value:x.stock??10},
+  {key:'desc',label:'Mô tả ngắn',value:x.desc||''},
+  {key:'icon',label:'Biểu tượng',value:x.icon||'🎁'}
+ ],data=>{
+  if(!data.name.trim()||!data.content.trim()){toast('Nhập tên và nội dung.','error');return false;}
+  if(data.claimUrl&&!/^https?:\/\//i.test(data.claimUrl.trim())){toast('Link phải bắt đầu http(s)://','error');return false;}
+  data.claimUrl=(data.claimUrl||'').trim();
+  const rewardLines=String(data.content||'').split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
+  if(rewardLines.length>1) data.stock=rewardLines.length;
+  else data.stock=Math.max(0,Number(data.stock)||1);
+  data.content=rewardLines.join('\n');
+  if(item) Object.assign(item,data);
+  else state.textRewards.push({id:'gift'+Date.now(),...data});
+  saveState();renderAdminTextRewards();updateMissionRewardView();beep(true);toast('Đã lưu quà tặng!','success');return true;
+ });
+}
+
+function renderHistory(){
+ const root=$('historyList');if(!root)return;
+ const filter=$('historyFilter')?.value||'all', cf=$('historyCurrency')?.value||'all', q=($('historySearch')?.value||'').trim().toLowerCase();
+ const myHistory = (state.history||[]).filter(x => !isBotRecord(x));
+ const list = myHistory.filter(x=>(filter==='all'||x.type===filter)&&(cf==='all'||x.currency===cf)&&(!q||`${x.detail} ${x.id} ${x.game} ${x.status}`.toLowerCase().includes(q)));
+ const allCur = getAllCurrencies();
+
+ // Update dropdown
+ const hc = $('historyCurrency');
+ if(hc) {
+     hc.innerHTML = '<option value="all">Tất cả tiền</option>' + Object.entries(allCur).map(([k,v])=>`<option value="${k}">${v.icon} ${v.short}</option>`).join('') + '<option value="QUÀ">🎁 Quà</option>';
+     hc.value = cf; // restore
+ }
+
+ if($('historyStats')){
+  const hhOut=myHistory.filter(x=>x.type==='withdraw'&&x.currency==='HH'&&(x.status.includes('✓')||x.status==='Thành công')).reduce((s,x)=>s+(x.amount||Math.abs(x.delta)||0),0);
+  const vndOut=myHistory.filter(x=>x.type==='withdraw'&&x.currency==='HH'&&(x.status.includes('✓')||x.status==='Thành công')).reduce((s,x)=>s+(x.vnd||((x.amount||Math.abs(x.delta)||0)*CASHOUT_RATE)),0);
+  $('historyStats').innerHTML=`<div class="wallet rounded-xl px-3 py-2"><div class="text-[10px] muted">Giao dịch</div><div class="orbit font-bold text-cyan-200">${fmt(myHistory.length)}</div></div><div class="wallet rounded-xl px-3 py-2"><div class="text-[10px] muted">Link đã vượt</div><div class="orbit font-bold text-violet-200">${fmt(state.missions||0)}</div></div><div class="wallet rounded-xl px-3 py-2"><div class="text-[10px] muted">${allCur.HH?.short||'HH'} đã rút</div><div class="orbit font-bold text-lime-200">${fmt(hhOut)}</div></div><div class="wallet rounded-xl px-3 py-2"><div class="text-[10px] muted">VNĐ đã nhận</div><div class="orbit font-bold text-pink-200">${fmt(vndOut)} đ</div></div>`;
+ }
+ if(!list.length){root.innerHTML='<div class="p-10 text-center muted text-sm">Chưa có giao dịch.</div>';return;}
+ root.innerHTML=list.slice(0,100).map(x=>{
+  // Tinh chỉnh hiển thị Status có màu theo "Chờ duyệt" hoặc "Thành công"
+  const isSuccess = x.status.includes('✓')||x.status==='Thành công';
+  const isPending = x.status.includes('⏳');
+  const statusColor = isSuccess ? 'text-emerald-300' : (isPending ? 'text-amber-300' : 'text-rose-300');
+  
+  const cName = allCur[x.currency] ? allCur[x.currency].short : x.currency;
+  return `<div class="p-4 flex flex-wrap items-center justify-between gap-3"><div class="min-w-0"><div class="font-semibold text-sm flex items-center gap-1.5">${escapeHtml(x.detail)} ${isSuccess?'<span class="text-emerald-400 text-xs">✓</span>':''}</div><div class="text-[11px] muted mt-1">${escapeHtml(x.id)} · ${escapeHtml(x.game)} · ${escapeHtml(x.time)}</div></div><div class="text-right"><div class="font-bold ${x.delta>=0?'text-emerald-300':'text-pink-300'}">${x.delta>=0?'+':''}${fmt(x.delta)} ${escapeHtml(cName)}</div><div class="text-[10px] ${statusColor} font-semibold">${escapeHtml(x.status)}</div></div></div>`;
+ }).join('');
+}
+
+function showTab(tab){
+ document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+ $('page-'+tab)?.classList.remove('hidden');
+ document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+ if(tab==='history') renderHistory();
+ if(tab==='leaderboard') renderLeaderboard();
+ if(tab==='shop') renderShop();
+ if(tab==='admin'&&adminOn) renderAdmin();
+}
+
+// Chuyển Tab trong Admin
+document.querySelectorAll('.admin-tab').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        document.querySelectorAll('.admin-view').forEach(v => v.classList.remove('active'));
+        const viewId = 'aview-' + e.target.dataset.aview;
+        if($(viewId)) $(viewId).classList.add('active');
+    });
+});
+
+function updateMissionRewardView(){
+ const cur=$('missionCurrency').value;
+ const isGift=cur==='GIFT';
+ $('missionTextRewardWrap')?.classList.toggle('hidden',!isGift);
+ $('missionRewardLabel').textContent=isGift?'Quà tặng:':'Mức thưởng:';
+ if(isGift){
+  const sel=$('missionTextReward');
+  const available=(state.textRewards||[]).filter(x=>Number(x.stock)>0);
+  sel.innerHTML=available.map(x=>`<option value="${escapeHtml(x.id)}">${escapeHtml(x.name)} · còn ${fmt(x.stock)}</option>`).join('');
+  $('missionRewardView').textContent=available.length?'Quà tặng · 60 giây':'Chưa có quà';
+ }else {
+     const cName = getAllCurrencies()[cur] ? getAllCurrencies()[cur].short : cur;
+     $('missionRewardView').textContent=`${fmt(settings.defaultRewards[cur]||0)} ${cName}`;
+ }
+}
+
+const LINK_PROVIDERS = {
+ link4m:{name:'Link4M',icon:'🔗',badge:'LINK4M GATEWAY',guide:'📌 <b>Link4M:</b> Xác thực Captcha → Chờ 60s → Nhận mã.'},
+ traffic_ontop:{name:'Traffic OnTop',icon:'🚀',badge:'TRAFFIC ONTOP',guide:'📌 <b>Traffic OnTop:</b> Vào OnTop → Chờ 60s.'},
+ layma:{name:'Lấy Mã VIP',icon:'⚡',badge:'LAYMA VIP',guide:'📌 <b>Lấy Mã VIP:</b> Đợi 60s → Nhận mã.'},
+ yeulink:{name:'Yêu Link',icon:'💎',badge:'YEULINK REWARD',guide:'📌 <b>Yêu Link:</b> Giữ tab 60s → Xuất mã.'},
+ megaurl:{name:'MegaURL',icon:'🔥',badge:'MEGAURL SECURE',guide:'📌 <b>MegaURL:</b> Tiếp tục và chờ 60s.'}
+};
+
+function updateProviderGuide(){
+ const sel = $('missionProvider')?.value || 'random';
+ if($('providerGuide')){
+  $('providerGuide').innerHTML = sel==='random'?'💡 Luân chuyển tự động các cổng. Chờ 60 giây.':(LINK_PROVIDERS[sel]?.guide||'');
+ }
+}
+
+function restoreMissionUI(){
+ if(!activeMission || activeMission.used) return;
+ const provider = LINK_PROVIDERS[activeMission.providerKey] || LINK_PROVIDERS.link4m;
+ $('createdLink').classList.remove('hidden');
+ $('step2Locked').classList.add('hidden');
+ $('step2Ready').classList.remove('hidden');
+ $('step3Locked').classList.add('hidden');
+ $('step3Ready').classList.remove('hidden');
+ $('verifyCode').value=''; $('verifyMission').disabled=false;
+ if($('fakeUrl')) $('fakeUrl').value = 'gateway://' + (activeMission.providerKey||'link4m') + '/' + activeMission.code;
+ if($('linkGateBadge')) $('linkGateBadge').textContent = provider.badge;
+ if($('gatewayProvider')) $('gatewayProvider').textContent = provider.icon + ' ' + provider.name;
+ if($('gatewayReward')) $('gatewayReward').textContent = activeMission.rewardName || '';
+ if($('linkMeta')) $('linkMeta').innerHTML = `<span><b>Cổng:</b> ${provider.icon} ${provider.name}</span><span><b>Trạng thái:</b> <span class="text-amber-200">Chờ mã</span></span><span><b>Thưởng:</b> <span class="text-cyan-200 font-bold">${escapeHtml(activeMission.rewardName||'')}</span></span>`;
+ startExpiryCountdown();
+}
+
+function resetMissionUI(){
+ clearInterval(expiryInterval); expiryInterval=null;
+ $('createdLink').classList.add('hidden');
+ $('step2Ready').classList.add('hidden');
+ $('step2Locked').classList.remove('hidden');
+ $('step3Ready').classList.add('hidden');
+ $('step3Locked').classList.remove('hidden');
+ $('secretWrap').classList.add('hidden');
+ $('verifyCode').value=''; $('verifyMission').disabled=false;
+}
+
+function startExpiryCountdown(){
+ clearInterval(expiryInterval);
+ const tick = () => {
+  if(!activeMission || !activeMission.expiresAt){ clearInterval(expiryInterval); return; }
+  const remain = Math.max(0, activeMission.expiresAt - Date.now());
+  if(remain <= 0){
+   clearInterval(expiryInterval);
+   if($('missionExpiryCountdown')) $('missionExpiryCountdown').textContent = 'HẾT HẠN';
+   return;
+  }
+  const m = Math.floor(remain/60000), s = Math.floor((remain%60000)/1000);
+  if($('missionExpiryCountdown')) $('missionExpiryCountdown').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ };
+ tick();
+ expiryInterval = setInterval(tick, 1000);
+}
+
+// ===== EVENTS =====
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{beep();showTab(b.dataset.tab);}));
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.goto)));
+if($('missionProvider')) $('missionProvider').addEventListener('change', updateProviderGuide);
+if($('missionCurrency')) $('missionCurrency').addEventListener('change',updateMissionRewardView);
+
+if($('soundBtn')) $('soundBtn').addEventListener('click',()=>{
+ soundOn = !soundOn;
+ $('soundBtn').textContent = soundOn ? '🔊' : '🔇';
+ toast(soundOn ? 'Đã bật âm thanh' : 'Đã tắt âm thanh');
+});
+
+$('createMission').addEventListener('click',()=>{
+ const currency=$('missionCurrency').value, title=$('missionTitle').value.trim();
+ const isTextReward = currency==='GIFT';
+ const textReward = isTextReward ? (state.textRewards||[]).find(x=>x.id===$('missionTextReward').value) : null;
+ const reward = isTextReward ? 0 : (settings.defaultRewards[currency]||0);
+ if(!title){toast('Nhập tiêu đề.','error');return;}
+ if(isTextReward && (!textReward || Number(textReward.stock)<=0)){toast('Quà đã hết hoặc chưa có.','error');return;}
+ if(!isTextReward && (state.daily.used[currency]||0)>=settings.dailyLimits[currency]){toast('Đã hết lượt cho '+currency+'.','error');return;}
+
+ const pChoice=$('missionProvider')?.value||'random';
+ const pKeys=Object.keys(LINK_PROVIDERS);
+ const chosenKey = pChoice==='random' ? pKeys[Math.floor(Math.random()*pKeys.length)] : pChoice;
+ const provider = LINK_PROVIDERS[chosenKey] || LINK_PROVIDERS.link4m;
+
+ clearInterval(expiryInterval); expiryInterval=null;
+ const code = generateCode(currency);
+ 
+ const cName = isTextReward ? textReward.name : `${fmt(reward)} ${getAllCurrencies()[currency]?.short || currency}`;
+
+ activeMission = {
+  currency, reward,
+  textRewardId: textReward?.id||null,
+  title: `${title} (${provider.name})`,
+  used: false, code,
+  expiresAt: Date.now() + 15*60*1000,
+  providerKey: chosenKey,
+  claimUrl: isTextReward ? (textReward.claimUrl||'') : '',
+  rewardName: cName,
+  createdAt: Date.now()
+ };
+ saveActiveMission();
+
+ if($('fakeUrl')) $('fakeUrl').value = 'gateway://' + chosenKey + '/' + code;
+ if($('linkGateBadge')) $('linkGateBadge').textContent = provider.badge;
+ if($('linkMeta')) $('linkMeta').innerHTML = `<span><b>Cổng:</b> ${provider.icon} ${provider.name}</span><span><b>Trạng thái:</b> <span class="text-amber-200">Chờ mở link</span></span><span><b>Thưởng:</b> <span class="text-cyan-200 font-bold">${escapeHtml(cName)}</span></span>`;
+ if($('gatewayProvider')) $('gatewayProvider').textContent = provider.icon + ' ' + provider.name;
+ if($('gatewayReward')) $('gatewayReward').textContent = cName;
+
+ $('createdLink').classList.remove('hidden');
+ $('step2Locked').classList.add('hidden');
+ $('step2Ready').classList.remove('hidden');
+ $('secretWrap').classList.add('hidden');
+ $('step3Locked').classList.add('hidden');
+ $('step3Ready').classList.remove('hidden');
+ $('verifyCode').value=''; $('verifyMission').disabled=false;
+
+ startExpiryCountdown();
+ beep();toast(`Đã tạo link ${provider.name}. Bấm "MỞ LINK LẤY MÃ"!`,'success');
+});
+
+if($('copyUrl')) $('copyUrl').addEventListener('click',()=>copyText($('fakeUrl').value));
+
+function copyText(t){
+ if(navigator.clipboard?.writeText) navigator.clipboard.writeText(t).then(()=>toast('Đã sao chép!','success')).catch(()=>fallbackCopy(t));
+ else fallbackCopy(t);
+}
+function fallbackCopy(t){
+ const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();
+ try{document.execCommand('copy');toast('Đã sao chép!','success');}catch(e){toast('Lỗi copy','error');}
+ x.remove();
+}
+
+$('devFast').addEventListener('click',()=>{
+ if(!activeMission) return;
+ $('secretCode').textContent = activeMission.code;
+ $('secretWrap').classList.remove('hidden');
+ toast('Mã cho Admin test. Dán vào Bước 3.','info');
+});
+
+if($('copyCode')) $('copyCode').addEventListener('click',()=>copyText(activeMission?.code||''));
+
+// ===== OPEN GATEWAY =====
+if($('openGatewayBtn')) $('openGatewayBtn').addEventListener('click',(e)=>{
+ e.preventDefault();
+ if(!activeMission){toast('Không có nhiệm vụ đang chờ.','error');return;}
+ if(activeMission.used){toast('Đã hoàn thành rồi.','error');return;}
+ if(Date.now() > activeMission.expiresAt){toast('Mã đã hết hạn. Tạo link mới.','error');return;}
+ const url = buildGatewayUrl(activeMission);
+ const win = window.open(url, '_blank');
+ if(!win){ toast('Trình duyệt chặn popup. Hãy cho phép popup hoặc bấm lại.','error'); return; }
+ setTimeout(()=>URL.revokeObjectURL(url), 120000);
+ toast('Đã mở tab xác thực. Chờ 60s lấy mã!','success');
+});
+
+$('verifyMission').addEventListener('click',()=>{
+ if(!activeMission){toast('Không có nhiệm vụ đang chờ.','error');return;}
+ if(activeMission.used){toast('Đã hoàn thành rồi.','error');return;}
+ if(Date.now() > activeMission.expiresAt){toast('Mã đã hết hạn. Tạo link mới.','error');return;}
+ const entered = $('verifyCode').value.trim().toUpperCase();
+ if(!entered){toast('Dán mã vào ô xác thực.','error');return;}
+ if(!CODE_REGEX.test(entered)){toast('Mã sai định dạng (VD: TUNA-KC-A7B3-4821).','error');return;}
+ if(entered !== String(activeMission.code||'').toUpperCase()){toast('Mã không khớp nhiệm vụ đang chờ.','error');return;}
+ if((state.claimedCodes||[]).includes(entered)){toast('Mã này đã dùng rồi.','error');return;}
+
+ const rewardForToast = activeMission.reward;
+ const currencyForToast = activeMission.currency;
+ const isTextReward = activeMission.currency === 'GIFT';
+ const claimedTextReward = isTextReward ? (state.textRewards||[]).find(x=>x.id===activeMission.textRewardId) : null;
+
+ if(isTextReward){
+  if(!claimedTextReward || Number(claimedTextReward.stock)<=0){toast('Quà đã hết.','error');return;}
+  const rewardLines = String(claimedTextReward.content||'').split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
+  if(!rewardLines.length){toast('Kho quà hết nội dung.','error');return;}
+  claimedTextReward.claimedContent = rewardLines.shift();
+  claimedTextReward.content = rewardLines.join('\n');
+  claimedTextReward.stock = rewardLines.length;
+  addHistory('shop','Quà tặng',`${claimedTextReward.name} — nhận 1 phần`,0,'QUÀ','Đã nhận ✓','LINK-'+entered);
+ } else {
+  state.wallet[currencyForToast] += rewardForToast;
+  state.daily.used[currencyForToast] = (state.daily.used[currencyForToast]||0)+1;
+  addHistory('mission','Nhiệm vụ',activeMission.title,rewardForToast,currencyForToast,'Thành công ✓');
+ }
+
+ state.claimedCodes.push(entered);
+ state.missions = (state.missions||0)+1;
+ state.leaderboard[currentUser] = (state.leaderboard[currentUser]||0)+1;
+ saveState();
+
+ const savedContent = claimedTextReward ? claimedTextReward.claimedContent : null;
+ const savedName = claimedTextReward ? claimedTextReward.name : null;
+
+ activeMission = null;
+ saveActiveMission();
+
+ renderWallet();
+ renderMissionProgress();
+ renderLeaderboard();
+ renderHistory();
+ renderAdminRevenue();
+ resetMissionUI();
+
+ if(claimedTextReward){
+  $('textRewardTitle').textContent = savedName + ' — phần quà của bạn';
+  $('textRewardContent').value = savedContent || 'Không có nội dung.';
+  $('rewardTextModal').classList.remove('hidden');
+ }
+
+ beep(true);
+ const cName = getAllCurrencies()[currencyForToast] ? getAllCurrencies()[currencyForToast].short : currencyForToast;
+ toast(isTextReward ? `Đã nhận quà: ${savedName}!` : `Cộng +${fmt(rewardForToast)} ${cName}!`, 'success');
+});
+
+if($('copyRewardTextBtn')) $('copyRewardTextBtn').addEventListener('click',()=>copyText($('textRewardContent').value));
+if($('closeRewardTextBtn')) $('closeRewardTextBtn').addEventListener('click',()=>$('rewardTextModal').classList.add('hidden'));
+
+// Withdraw PENDING LOGIC
+const gameConfig={
+ ff:{label:'UID Free Fire',placeholder:'Nhập UID Free Fire'},
+ lq:{label:'UID Liên Quân',placeholder:'Nhập UID Liên Quân'},
+ rb:{label:'Username Roblox',placeholder:'Nhập Username Roblox'},
+ fc:{label:'UID / HLV ID FC Online',placeholder:'Nhập UID hoặc HLV ID'}
+};
+function renderPacks(){
+ const game=$('withdrawGame').value,opts=state.packs.filter(p=>p.game===game);
+ $('uidLabel').textContent=gameConfig[game].label;
+ $('gameUid').placeholder=gameConfig[game].placeholder;
+ const allCur = getAllCurrencies();
+ $('withdrawPack').innerHTML=opts.map(p=>{
+     const cName = allCur[p.currency] ? allCur[p.currency].short : p.currency;
+     return `<option value="${p.id}">${p.label} — ${fmt(p.cost)} ${cName}</option>`;
+ }).join('');
+ updatePackCost();
+}
+function updatePackCost(){
+ const p=state.packs.find(x=>x.id===$('withdrawPack').value);
+ const allCur = getAllCurrencies();
+ if(p) {
+     const cName = allCur[p.currency] ? allCur[p.currency].short : p.currency;
+     $('packCost').textContent = `${fmt(p.cost)} ${cName}`;
+ } else {
+     $('packCost').textContent = 'Chưa có gói';
+ }
+}
+if($('withdrawGame')) $('withdrawGame').addEventListener('change',renderPacks);
+if($('withdrawPack')) $('withdrawPack').addEventListener('change',updatePackCost);
+
+$('submitWithdraw').addEventListener('click',()=>{
+ const uid=$('gameUid').value.trim(), p=state.packs.find(x=>x.id===$('withdrawPack').value);
+ if(!uid){toast('Nhập UID game.','error');return;}
+ if(!p){toast('Chưa có gói.','error');return;}
+ const minRate = settings.minCashoutRates?.[p.currency] || 100;
+ const cName = getAllCurrencies()[p.currency] ? getAllCurrencies()[p.currency].short : p.currency;
+ if(p.cost < minRate){toast(`Tối thiểu cần ${fmt(minRate)} ${cName} để đổi gói.`,'error');return;}
+ if((state.wallet[p.currency]||0)<p.cost){toast(`Ví ${cName} không đủ.`,'error');return;}
+ 
+ // Trừ tiền tạm thời
+ state.wallet[p.currency] -= p.cost;
+ 
+ const transId = 'ST-GAME-'+Math.random().toString(36).slice(2,7).toUpperCase();
+ $('withdrawSuccessModal').classList.remove('hidden');
+ $('withdrawPendingState').classList.remove('hidden');
+ $('withdrawDoneState').classList.add('hidden');
+ if($('withdrawLoadingBar')) $('withdrawLoadingBar').style.width='30%';
+ 
+ if($('popUid')) $('popUid').textContent = uid;
+ if($('popPack')) $('popPack').textContent = p.label;
+ if($('popGame')) $('popGame').textContent = gameName(p.game);
+ if($('popId')) $('popId').textContent = transId;
+ 
+ setTimeout(()=>{
+   if($('withdrawLoadingBar')) $('withdrawLoadingBar').style.width='85%';
+ }, 600);
+
+ setTimeout(()=>{
+  $('withdrawPendingState').classList.add('hidden');
+  $('withdrawDoneState').classList.remove('hidden');
+  if($('withdrawLoadingBar')) $('withdrawLoadingBar').style.width='100%';
+  
+  // Lưu vào history là Pending
+  addHistory('withdraw', gameName(p.game), `${p.label} → UID: ${uid}`, -p.cost, p.currency, '⏳ Đang chờ duyệt', transId);
+  
+  // Đẩy lệnh vào cho admin duyệt
+  globalPendingApprovals.push({
+      id: transId,
+      user: currentUser,
+      time: new Date().toLocaleString('vi-VN'),
+      detail: `Rút gói ${p.label} - Game: ${gameName(p.game)} - ID: ${uid}`,
+      amount: p.cost,
+      currency: p.currency
+  });
+  savePending();
+  
+  saveState();
+  renderWallet();
+  beep(true);
+ },1800);
+});
+if($('closeWithdrawSuccess')) $('closeWithdrawSuccess').addEventListener('click',()=>$('withdrawSuccessModal').classList.add('hidden'));
+
+// Cashout PENDING LOGIC
+if($('openCashout')) $('openCashout').addEventListener('click',()=>{
+ const amt = Number($('cashoutAmount').value);
+ const min = settings.minCashoutRates?.HH || 100;
+ const hhName = getAllCurrencies().HH.short;
+ if(!amt || amt < min){toast(`Tối thiểu cần ${fmt(min)} ${hhName} để rút.`,'error');return;}
+ if(amt > (state.wallet.HH||0)){toast(`Số dư ${hhName} không đủ.`,'error');return;}
+ $('cashoutModal').classList.remove('hidden');
+});
+if($('closeCashout')) $('closeCashout').addEventListener('click',()=>$('cashoutModal').classList.add('hidden'));
+if($('cancelCashout')) $('cancelCashout').addEventListener('click',()=>$('cashoutModal').classList.add('hidden'));
+if($('confirmCashout')) $('confirmCashout').addEventListener('click',()=>{
+ const amt = Number($('cashoutAmount').value);
+ const stk = $('cashoutStk').value.trim();
+ const bank = $('cashoutBank').value.trim();
+ const name = $('cashoutName').value.trim();
+ const min = settings.minCashoutRates?.HH || 100;
+ const hhName = getAllCurrencies().HH.short;
+ if(!stk || !bank || !name){toast('Nhập đủ thông tin.','error');return;}
+ if(!amt || amt < min || amt>(state.wallet.HH||0)){toast(`Tối thiểu ${fmt(min)} ${hhName} và không vượt quá số dư.`,'error');return;}
+ 
+ // Trừ tiền tạm thời
+ state.wallet.HH -= amt;
+ const vnd = amt * CASHOUT_RATE;
+ const transId = 'ST-BANK-'+Math.random().toString(36).slice(2,7).toUpperCase();
+ 
+ // Add history pending
+ addHistory('withdraw','Ngân hàng',`Rút ${fmt(amt)} ${hhName} → ${fmt(vnd)}đ (${bank} - ${stk})`,-amt,'HH','⏳ Đang chờ duyệt', transId);
+ 
+ // Push to pending
+ globalPendingApprovals.push({
+      id: transId,
+      user: currentUser,
+      time: new Date().toLocaleString('vi-VN'),
+      detail: `Rút VNĐ - ${bank} - ${stk} (${name})`,
+      amount: amt,
+      currency: 'HH'
+ });
+ savePending();
+ 
+ saveState();
+ renderWallet();
+ $('cashoutModal').classList.add('hidden');
+ toast(`Đã gửi lệnh rút tiền! Vui lòng chờ Admin duyệt.`, 'info');
+ beep(true);
+});
+if($('cashoutAmount')) $('cashoutAmount').addEventListener('input', updateCashoutPreview);
+
+if($('exportHistory')) $('exportHistory').addEventListener('click',()=>{
+ const data = JSON.stringify(state.history || [], null, 2);
+ const blob = new Blob([data], {type:'application/json'});
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement('a');
+ a.href = url; a.download = 'nebula_history_'+Date.now()+'.json';
+ a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+ toast('Đã xuất lịch sử!','success');
+});
+
+// Admin
+if($('toggleAdminPass')) $('toggleAdminPass').addEventListener('click',()=>{
+ $('adminPass').type = $('adminPass').type==='password'?'text':'password';
+});
+if($('adminLoginBtn')) $('adminLoginBtn').addEventListener('click',()=>{
+ const u=$('adminUser').value.trim(), p=$('adminPass').value.trim();
+ if(u===(settings.adminAuth?.user||'admin') && p===(settings.adminAuth?.pass||'admin123')){
+  adminOn=true;
+  $('adminLogin').classList.add('hidden'); $('adminPanel').classList.remove('hidden');
+  renderAdmin(); beep(true); toast('Đăng nhập quản trị thành công.','success');
+ } else { beep(false); toast('Sai tài khoản hoặc mật khẩu.','error'); }
+});
+if($('adminLogout')) $('adminLogout').addEventListener('click',()=>{
+ adminOn=false; if($('devFast')) $('devFast').classList.add('hidden');
+ $('adminPanel').classList.add('hidden'); $('adminLogin').classList.remove('hidden');
+});
+
+// LƯU CÁC SETTING (FIX: Cho phép lưu số 0)
+$('saveRewards').addEventListener('click',()=>{
+ Object.keys(getAllCurrencies()).forEach(k=>{
+  const el = $('default'+k);
+  if(el){ const v=Number(el.value); if(v>=0) settings.defaultRewards[k]=v; }
+ });
+ saveSettings(); beep(true); toast('Đã lưu mức thưởng!','success');
+});
+
+$('saveLimit').addEventListener('click',()=>{
+ Object.keys(getAllCurrencies()).forEach(k=>{
+  const el = $('limit'+k);
+  if(el){ const v=Number(el.value); if(v>=0) settings.dailyLimits[k]=v; }
+ });
+ saveSettings(); renderSlotOverview(); beep(true); toast('Đã lưu giới hạn!','success');
+});
+
+$('saveMinCashout').addEventListener('click',()=>{
+ if(!settings.minCashoutRates) settings.minCashoutRates = {};
+ Object.keys(getAllCurrencies()).forEach(k=>{
+  const el = $('minCashout_'+k);
+  if(el){ const v=Number(el.value); if(v>=0) settings.minCashoutRates[k]=v; }
+ });
+ saveSettings(); renderWallet(); beep(true);
+ toast(`Đã lưu hạn mức rút tiền tối thiểu!`,'success');
+});
+
+// Lưu cấu hình Auto Duyệt
+if($('saveAutoApproveBtn')) $('saveAutoApproveBtn').addEventListener('click', () => {
+ if(!settings.autoApprove) settings.autoApprove = {};
+ settings.autoApprove.enabled = $('autoApproveEnabled').value === '1';
+ settings.autoApprove.speed = Math.max(1, Number($('autoApproveSpeed').value) || 5);
+ saveSettings();
+ scheduleAutoApprove(); // Áp dụng ngay
+ beep(true);
+ toast(`Đã lưu! Bot sẽ tự động duyệt ${settings.autoApprove.speed}s/lệnh`, 'success');
+});
+
+// Duyệt Nhanh Tất Cả Lệnh Trong Hàng Đợi (Lên đến 100 lệnh)
+if($('approveAllBtn')) $('approveAllBtn').addEventListener('click', () => {
+ if(!globalPendingApprovals.length) return toast('Không có lệnh nào cần duyệt!', 'info');
+ if(confirm(`Bạn có chắc muốn DUYỆT TẤT CẢ ${globalPendingApprovals.length} lệnh cùng lúc?`)){
+   let totalCost = 0;
+   while(globalPendingApprovals.length > 0){
+     const req = globalPendingApprovals.pop();
+     const cost = calculateVndCost(req.amount, req.currency);
+     totalCost += cost;
+     updateHistoryStatus(req.id, 'Thành công ✓', req.user);
+   }
+   settings.totalPayoutVnd = (Number(settings.totalPayoutVnd) || 0) + totalCost;
+   saveSettings();
+   savePending();
+   renderAdminApprovals();
+   renderAdminRevenue();
+   beep(true);
+   toast(`Đã duyệt tất cả! Trừ -${fmt(totalCost)}đ vào Doanh thu`, 'success');
+ }
+});
+
+// Xóa Hàng Chờ
+if($('clearAllPendingBtn')) $('clearAllPendingBtn').addEventListener('click', () => {
+ if(!globalPendingApprovals.length) return toast('Hàng chờ đang trống!', 'info');
+ if(confirm(`Xóa toàn bộ ${globalPendingApprovals.length} lệnh trong hàng chờ?`)){
+   globalPendingApprovals = [];
+   savePending();
+   renderAdminApprovals();
+   toast('Đã dọn sạch hàng chờ duyệt!', 'info');
+ }
+});
+
+$('saveFake').addEventListener('click',()=>{
+ settings.fake.enabled = $('fakeEnabled').value==='1';
+ settings.fake.speed = Math.max(1, Number($('fakeSpeed').value) || 30);
+ const minL = Math.max(1, Number($('fakeMinLinks').value) || 3);
+ const maxL = Math.max(minL, Number($('fakeMaxLinks').value) || 5);
+ settings.fake.minLinks = minL;
+ settings.fake.maxLinks = maxL;
+ saveSettings();
+ scheduleFakeUsers(); // Áp dụng ngay thời gian mới mà không cần F5
+ beep(true);
+ toast(`Đã lưu! Bot sẽ vượt link sau mỗi ${settings.fake.speed}s (${minL}-${maxL} link/lần)`, 'success');
+});
+
+
+function renderAdmin(){
+ if(!adminOn)return;
+ if($('devFast')) $('devFast').classList.remove('hidden');
+ renderAdminRevenue();
+ renderAdminTextRewards();
+ renderCustomRewardManager();
+ renderAdminGiftcodes();
+ renderAdminApprovals();
+
+ const all = getAllCurrencies();
+
+ // Fill System Config Inputs
+ if($('curName_KC')) $('curName_KC').value = all.KC?.name || 'Kim Cương';
+ if($('curIcon_KC')) $('curIcon_KC').value = all.KC?.icon || '💎';
+ if($('curName_QH')) $('curName_QH').value = all.QH?.name || 'Quân Huy';
+ if($('curIcon_QH')) $('curIcon_QH').value = all.QH?.icon || '🔮';
+ if($('curName_Robux')) $('curName_Robux').value = all.Robux?.name || 'Robux';
+ if($('curIcon_Robux')) $('curIcon_Robux').value = all.Robux?.icon || '🟡';
+ if($('curName_FC')) $('curName_FC').value = all.FC?.name || 'FC Points';
+ if($('curIcon_FC')) $('curIcon_FC').value = all.FC?.icon || '⚽';
+ if($('curName_HH')) $('curName_HH').value = all.HH?.name || 'Hoa Hồng';
+ if($('curIcon_HH')) $('curIcon_HH').value = all.HH?.icon || '💵';
+ 
+ if($('marqueeEnable')) $('marqueeEnable').checked = settings.sysConfig.marquee.enabled;
+ if($('marqueeTextInput')) $('marqueeTextInput').value = settings.sysConfig.marquee.text;
+ if($('siteTitleMainInput')) $('siteTitleMainInput').value = settings.sysConfig.siteName.main;
+ if($('siteTitleSubInput')) $('siteTitleSubInput').value = settings.sysConfig.siteName.sub;
+ if($('siteSloganInput')) $('siteSloganInput').value = settings.sysConfig.siteName.slogan || 'GAME REWARD HUB';
+
+ if($('tabName_mission')) $('tabName_mission').value = settings.sysConfig.tabNames.mission || '⚡ Vượt nhiệm vụ';
+ if($('tabName_withdraw')) $('tabName_withdraw').value = settings.sysConfig.tabNames.withdraw || '🎁 Rút vật phẩm';
+ if($('tabName_shop')) $('tabName_shop').value = settings.sysConfig.tabNames.shop || '🛍️ Shop quà tặng';
+ if($('tabName_history')) $('tabName_history').value = settings.sysConfig.tabNames.history || '📜 Lịch sử';
+ if($('tabName_leaderboard')) $('tabName_leaderboard').value = settings.sysConfig.tabNames.leaderboard || '🏆 BXH';
+ if($('tabName_admin')) $('tabName_admin').value = settings.sysConfig.tabNames.admin || '⚙️ Quản trị';
+
+
+ const minGrid = $('minCashoutGrid');
+ if(minGrid) minGrid.innerHTML = Object.entries(all).map(([k,v])=>`<label class="text-xs muted">${v.icon} Min rút ${v.short}<input id="minCashout_${k}" type="number" min="0" class="field mt-2" value="${settings.minCashoutRates?.[k]||100}"/></label>`).join('');
+
+ const defGrid = $('defaultRewardsGrid'), limGrid = $('limitGrid');
+ if(defGrid) defGrid.innerHTML = Object.entries(all).map(([k,v])=>`<label class="text-xs muted">${v.icon} ${v.short}<input id="default${k}" type="number" min="0" class="field mt-2" value="${settings.defaultRewards[k]||0}"/></label>`).join('');
+ if(limGrid) limGrid.innerHTML = Object.entries(all).map(([k,v])=>`<label class="text-xs muted">${v.icon} ${v.short}<input id="limit${k}" type="number" min="0" class="field mt-2" value="${settings.dailyLimits[k]||0}"/></label>`).join('');
+
+ if($('autoApproveEnabled')) $('autoApproveEnabled').value = settings.autoApprove?.enabled ? '1' : '0';
+ if($('autoApproveSpeed')) $('autoApproveSpeed').value = settings.autoApprove?.speed || 5;
+ if($('fakeEnabled')) $('fakeEnabled').value = settings.fake.enabled ? '1' : '0';
+ if($('fakeSpeed')) $('fakeSpeed').value = settings.fake.speed || 30;
+ if($('fakeMinLinks')) $('fakeMinLinks').value = settings.fake.minLinks || 3;
+ if($('fakeMaxLinks')) $('fakeMaxLinks').value = settings.fake.maxLinks || 5;
+
+ if($('adminShopList')) $('adminShopList').innerHTML=state.shop.map(x=>{
+     const cName = all[x.currency] ? all[x.currency].short : x.currency;
+     return `<div class="flex justify-between items-center p-3 rounded-xl bg-white/[.035]">
+   <div><b class="text-sm">${escapeHtml(x.name)}</b><div class="text-[11px] muted">${fmt(x.price)} ${cName} · Còn ${x.stock}</div></div>
+   <div class="flex gap-2"><button class="btn-ghost rounded-lg px-3 py-1.5 text-xs" data-edit-shop="${x.id}">Sửa</button><button class="btn-ghost rounded-lg px-3 py-1.5 text-xs text-rose-300" data-del-shop="${x.id}">Xóa</button></div>
+  </div>`}).join('');
+
+ if($('adminPackList')) $('adminPackList').innerHTML=state.packs.map(x=>{
+     const cName = all[x.currency] ? all[x.currency].short : x.currency;
+     return `<div class="flex justify-between items-center p-3 rounded-xl bg-white/[.035]">
+   <div><b class="text-sm">${escapeHtml(x.label)}</b><div class="text-[11px] muted">${gameName(x.game)} · ${fmt(x.cost)} ${cName}</div></div>
+   <div class="flex gap-2"><button class="btn-ghost rounded-lg px-3 py-1.5 text-xs" data-edit-pack="${x.id}">Sửa</button><button class="btn-ghost rounded-lg px-3 py-1.5 text-xs text-rose-300" data-del-pack="${x.id}">Xóa</button></div>
+  </div>`}).join('');
+}
+
+// Lưu cài đặt hệ thống
+if($('saveSystemConfigBtn')) $('saveSystemConfigBtn').addEventListener('click', () => {
+    if(!settings.sysConfig) settings.sysConfig = { currencyNames: {}, marquee: {}, siteName: {}, tabNames: {} };
+    
+    settings.sysConfig.currencyNames = {
+        KC: { name: $('curName_KC').value.trim()||'Kim Cương', icon: $('curIcon_KC').value.trim()||'💎' },
+        QH: { name: $('curName_QH').value.trim()||'Quân Huy', icon: $('curIcon_QH').value.trim()||'🔮' },
+        Robux: { name: $('curName_Robux').value.trim()||'Robux', icon: $('curIcon_Robux').value.trim()||'🟡' },
+        FC: { name: $('curName_FC').value.trim()||'FC Points', icon: $('curIcon_FC').value.trim()||'⚽' },
+        HH: { name: $('curName_HH').value.trim()||'Hoa Hồng', icon: $('curIcon_HH').value.trim()||'💵' },
+    };
+    
+    settings.sysConfig.marquee = {
+        enabled: $('marqueeEnable').checked,
+        text: $('marqueeTextInput').value.trim() || 'Chào mừng bạn đến với hệ thống!'
+    };
+    
+    settings.sysConfig.siteName = {
+        main: $('siteTitleMainInput').value.trim() || 'NEBULA',
+        sub: $('siteTitleSubInput').value.trim() || 'QUEST',
+        slogan: $('siteSloganInput').value.trim() || 'GAME REWARD HUB'
+    };
+
+    settings.sysConfig.tabNames = {
+        mission: $('tabName_mission').value.trim() || '⚡ Vượt nhiệm vụ',
+        withdraw: $('tabName_withdraw').value.trim() || '🎁 Rút vật phẩm',
+        shop: $('tabName_shop').value.trim() || '🛍️ Shop quà tặng',
+        history: $('tabName_history').value.trim() || '📜 Lịch sử',
+        leaderboard: $('tabName_leaderboard').value.trim() || '🏆 BXH',
+        admin: $('tabName_admin').value.trim() || '⚙️ Quản trị'
+    };
+    
+    saveSettings();
+    applySystemConfigUI();
+    syncMissionCurrencyDropdown();
+    renderAll();
+    renderAdmin(); // re-render inputs
+    beep(true);
+    toast('Đã lưu cấu hình hệ thống thành công!', 'success');
+});
+
+function openEditor(title,fields,onSave){
+ $('editTitle').textContent=title;
+ $('editFields').innerHTML=fields.map(f=>{
+  if(f.type==='select'){
+   return `<label class="block text-xs muted">${escapeHtml(f.label)}<select class="field mt-2" data-field="${f.key}">${f.options.map(o=>`<option value="${o.value}" ${o.value===f.value?'selected':''}>${escapeHtml(o.label)}</option>`).join('')}</select></label>`;
+  } else if(f.type==='textarea'){
+   return `<label class="block text-xs muted">${escapeHtml(f.label)}<textarea class="field mt-2 h-24 text-xs font-mono" data-field="${f.key}">${escapeHtml(f.value??'')}</textarea></label>`;
+  } else {
+   return `<label class="block text-xs muted">${escapeHtml(f.label)}<input class="field mt-2" data-field="${f.key}" type="${f.type||'text'}" value="${escapeHtml(f.value??'')}"/></label>`;
+  }
+ }).join('');
+ editHandler=onSave; $('editModal').classList.remove('hidden');
+}
+if($('closeEdit')) $('closeEdit').addEventListener('click',()=>$('editModal').classList.add('hidden'));
+if($('cancelEdit')) $('cancelEdit').addEventListener('click',()=>$('editModal').classList.add('hidden'));
+if($('saveEdit')) $('saveEdit').addEventListener('click',()=>{
+ if(!editHandler)return;
+ const data={};
+ $('editFields').querySelectorAll('[data-field]').forEach(el=>data[el.dataset.field]=el.type==='number'?Number(el.value):el.value);
+ if(editHandler(data)!==false){ saveState(); renderAdmin(); renderShop(); renderPacks(); $('editModal').classList.add('hidden'); }
+});
+
+if($('addCustomRewardBtn')) $('addCustomRewardBtn').addEventListener('click',()=>{
+ openEditor('Thêm mục thưởng mới',[
+  {key:'id',label:'Mã (VD: XU) - A-Z, 0-9',value:'XU'},
+  {key:'name',label:'Tên hiển thị',value:'Xu Khóa'},
+  {key:'icon',label:'Emoji',value:'🪙'},
+  {key:'reward',label:'Thưởng mỗi link',type:'number',min:0,value:100},
+  {key:'limit',label:'Giới hạn/ngày',type:'number',min:0,value:50}
+ ],d=>{
+  const id=String(d.id||'').trim().toUpperCase();
+  if(!id || !/^[A-Z0-9]{2,16}$/.test(id)){toast('Mã 2-16 ký tự A-Z/0-9.','error');return false;}
+  if((settings.customRewards||[]).some(x=>x.id===id)){toast('Mã đã tồn tại.','error');return false;}
+  if(!settings.customRewards) settings.customRewards=[];
+  settings.customRewards.push({id, name:d.name.trim()||id, short:id, icon:d.icon.trim()||'🎁', reward:d.reward, limit:d.limit, color:'text-amber-200'});
+  settings.defaultRewards[id]=d.reward; settings.dailyLimits[id]=d.limit;
+  if(!settings.minCashoutRates) settings.minCashoutRates = {};
+  settings.minCashoutRates[id] = 100;
+  if(!state.wallet[id]) state.wallet[id]=0;
+  saveSettings(); saveState(); syncMissionCurrencyDropdown(); renderWallet(); renderAdmin(); beep(true);
+  toast('Đã thêm mục thưởng!','success'); return true;
+ });
+});
+
+if($('customRewardList')) $('customRewardList').addEventListener('click',e=>{
+ const del=e.target.closest('[data-del-custom]');
+ if(del && confirm('Xóa mục thưởng này?')){
+  settings.customRewards = (settings.customRewards||[]).filter(x=>x.id!==del.dataset.delCustom);
+  saveSettings(); renderCustomRewardManager(); syncMissionCurrencyDropdown(); renderWallet(); renderAdmin();
+  toast('Đã xóa.','success');
+ }
+});
+
+
+if($('addShop')) $('addShop').addEventListener('click',()=>{
+ openEditor('Thêm vật phẩm shop',[
+  {key:'name',label:'Tên',value:'Vật phẩm mới'},
+  {key:'game',label:'Game',type:'select',value:'ff',options:[{value:'ff',label:'Free Fire'},{value:'lq',label:'Liên Quân'},{value:'rb',label:'Roblox'},{value:'fc',label:'FC Online'}]},
+  {key:'currency',label:'Tiền tệ',type:'select',value:'KC',options:Object.entries(getAllCurrencies()).map(([k,v])=>({value:k,label:v.short}))},
+  {key:'price',label:'Giá',type:'number',min:1,value:100},
+  {key:'stock',label:'Tồn kho',type:'number',min:0,value:20},
+  {key:'dailyLimit',label:'Giới hạn/ngày',type:'number',min:1,value:3},
+  {key:'icon',label:'Icon',value:'🎁'},
+  {key:'desc',label:'Mô tả',value:''}
+ ],d=>{
+  if(!d.name.trim()){toast('Nhập tên.','error');return false;}
+  state.shop.push({id:'s'+Date.now(), ...d, price:Number(d.price)||100, stock:Number(d.stock)||0, dailyLimit:Number(d.dailyLimit)||3});
+  saveState(); renderShop(); renderAdmin(); toast('Đã thêm.','success'); return true;
+ });
+});
+
+if($('addPack')) $('addPack').addEventListener('click',()=>{
+ openEditor('Thêm gói đổi thưởng',[
+  {key:'label',label:'Tên gói',value:'Gói mới'},
+  {key:'game',label:'Game',type:'select',value:'ff',options:[{value:'ff',label:'Free Fire'},{value:'lq',label:'Liên Quân'},{value:'rb',label:'Roblox'},{value:'fc',label:'FC Online'}]},
+  {key:'currency',label:'Tiền tệ',type:'select',value:'KC',options:Object.entries(getAllCurrencies()).map(([k,v])=>({value:k,label:v.short}))},
+  {key:'cost',label:'Chi phí',type:'number',min:1,value:100},
+  {key:'amount',label:'Số lượng',type:'number',min:1,value:100}
+ ],d=>{
+  if(!d.label.trim()){toast('Nhập tên gói.','error');return false;}
+  state.packs.push({id:'p'+Date.now(), ...d, cost:Number(d.cost)||100, amount:Number(d.amount)||100});
+  saveState(); renderPacks(); renderAdmin(); toast('Đã thêm gói.','success'); return true;
+ });
+});
+
+if($('adminShopList')) $('adminShopList').addEventListener('click',e=>{
+ const edit=e.target.closest('[data-edit-shop]'), del=e.target.closest('[data-del-shop]');
+ if(edit){
+  const item = state.shop.find(x=>x.id===edit.dataset.editShop);
+  if(!item) return;
+  openEditor('Sửa vật phẩm',[
+   {key:'name',label:'Tên',value:item.name},
+   {key:'price',label:'Giá',type:'number',min:1,value:item.price},
+   {key:'stock',label:'Tồn kho',type:'number',min:0,value:item.stock},
+   {key:'dailyLimit',label:'Giới hạn/ngày',type:'number',min:1,value:item.dailyLimit||3},
+   {key:'icon',label:'Icon',value:item.icon||'🎁'},
+   {key:'desc',label:'Mô tả',value:item.desc||''}
+  ],d=>{
+   Object.assign(item, d);
+   item.price=Number(item.price)||100; item.stock=Number(item.stock)||0; item.dailyLimit=Number(item.dailyLimit)||3;
+   saveState(); renderShop(); renderAdmin(); toast('Đã lưu.','success'); return true;
+  });
+ }
+ if(del && confirm('Xóa vật phẩm này?')){
+  state.shop = state.shop.filter(x=>x.id!==del.dataset.delShop);
+  saveState(); renderShop(); renderAdmin(); toast('Đã xóa.','success');
+ }
+});
+
+if($('adminPackList')) $('adminPackList').addEventListener('click',e=>{
+ const edit=e.target.closest('[data-edit-pack]'), del=e.target.closest('[data-del-pack]');
+ if(edit){
+  const item = state.packs.find(x=>x.id===edit.dataset.editPack);
+  if(!item) return;
+  openEditor('Sửa gói',[
+   {key:'label',label:'Tên gói',value:item.label},
+   {key:'cost',label:'Chi phí',type:'number',min:1,value:item.cost},
+   {key:'amount',label:'Số lượng',type:'number',min:1,value:item.amount}
+  ],d=>{
+   Object.assign(item, d);
+   item.cost=Number(item.cost)||100; item.amount=Number(item.amount)||100;
+   saveState(); renderPacks(); renderAdmin(); toast('Đã lưu.','success'); return true;
+  });
+ }
+ if(del && confirm('Xóa gói này?')){
+  state.packs = state.packs.filter(x=>x.id!==del.dataset.delPack);
+  saveState(); renderPacks(); renderAdmin(); toast('Đã xóa.','success');
+ }
+});
+
+// Account
+if($('accountBtn')) $('accountBtn').addEventListener('click',()=>{
+ $('accountInput').value = currentUser==='Khách'?'':currentUser;
+ $('accountModal').classList.remove('hidden');
+});
+if($('closeAccount')) $('closeAccount').addEventListener('click',()=>$('accountModal').classList.add('hidden'));
+if($('guestAccount')) $('guestAccount').addEventListener('click',()=>switchUser('Khách'));
+if($('saveAccount')) $('saveAccount').addEventListener('click',()=>{
+ const n=$('accountInput').value.trim();
+ if(!n) return;
+ switchUser(n);
+});
+function switchUser(n){
+ currentUser=n;
+ localStorage.setItem('nebula_user',n);
+ loadState();
+ activeMission = loadActiveMission();
+ applySystemConfigUI();
+ renderAll();
+ if(activeMission && !activeMission.used) restoreMissionUI(); else resetMissionUI();
+ $('accountModal').classList.add('hidden');
+ toast('Đã đổi tài khoản: '+n,'success');
+}
+
+function renderAll(){
+ try { renderWallet(); } catch(e) { console.error('wallet', e); }
+ try { renderShop(); } catch(e) { console.error('shop', e); }
+ try { renderHistory(); } catch(e) { console.error('history', e); }
+ try { renderPacks(); } catch(e) { console.error('packs', e); }
+ try { renderMissionProgress(); } catch(e) { console.error('progress', e); }
+ try { renderLiveFeed(); } catch(e) { console.error('feed', e); }
+ try { renderLeaderboard(); } catch(e) { console.error('leaderboard', e); }
+}
+
+// INIT
+loadState();
+applySystemConfigUI();
+syncMissionCurrencyDropdown();
+renderAll();
+updateMissionRewardView();
+updateProviderGuide();
+activeMission = loadActiveMission();
+if(activeMission && !activeMission.used) restoreMissionUI(); else resetMissionUI();
+scheduleFakeUsers();
+setInterval(renderLiveFeed, 5000);
+
+})();
+</script>
+</body>
+</html>
